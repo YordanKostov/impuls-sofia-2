@@ -1,80 +1,91 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
-export default function ImageCarousel() {
-  const [images, setImages] = useState([]);
+// 1. Accept props: 'externalImages' (optional) and 'className' (for custom height)
+export default function ImageCarousel({ externalImages, className }) {
+  const [fetchedImages, setFetchedImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // 1. Fetch Data
+  // Determine which images to use
+  const images = externalImages || fetchedImages;
+
+  // 2. Fetch Data (ONLY if no external images are provided)
   useEffect(() => {
+    if (externalImages) return; // Skip fetching if we already have images
+
     supabase
       .from("gallery_images")
       .select("*")
       .eq("featured", true)
       .order("order_index")
       .then(({ data }) => {
-        if (data) setImages(data);
+        if (data) setFetchedImages(data);
       });
-  }, []);
+  }, [externalImages]);
 
-  // 2. Automatic Timer
+  // 3. Automatic Timer
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (!images || images.length <= 1) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3500); // Set to 3.5 seconds for better readability
+    }, 3500);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [images]);
 
-  if (!images.length) return null;
+  if (!images || !images.length) return null;
 
   return (
-    // Outer Container (Viewport) - Defines size and hides overflow
-    <div className="h-[520px] rounded-3xl overflow-hidden relative w-full group">
-      {/* Inner Track (The sliding strip) 
-         - 'flex': puts images side-by-side
-         - 'transition-transform duration-700': makes the movement smooth over 700ms
-         - 'style': calculates how far to move left based on index (0%, -100%, -200%, etc.)
-      */}
+    // Allow custom className for height, default to h-[520px] if not provided
+    <div
+      className={`rounded-3xl overflow-hidden relative w-full group ${
+        className || "h-[520px]"
+      }`}
+    >
       <div
         className="flex h-full transition-transform duration-700 ease-in-out will-change-transform"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        {/* Map through ALL images */}
-        {images.map((image, index) => (
-          // Individual Slide Item - Must be min-w-full to take up entire viewport space
-          <div key={image.id || index} className="min-w-full h-full relative">
-            <img
-              src={image.image_url}
-              alt={image.alt || `Gallery image ${index + 1}`}
-              className="w-full h-full object-cover select-none"
-              draggable="false"
-            />
-            {/* Optional: Add a dark overlay for better text contrast if needed later */}
-            {/* <div className="absolute inset-0 bg-black/20"></div> */}
-          </div>
-        ))}
+        {images.map((image, index) => {
+          // HANDLE DATA DIFFERENCE:
+          // If 'image' is a string (from News), use it directly.
+          // If 'image' is an object (from DB), use .image_url
+          const src = typeof image === "string" ? image : image.image_url;
+          const alt = typeof image === "string" ? `Slide ${index}` : image.alt;
+
+          return (
+            <div key={index} className="min-w-full h-full relative">
+              <img
+                src={src}
+                alt={alt}
+                className="w-full h-full object-cover select-none"
+                draggable="false"
+              />
+            </div>
+          );
+        })}
       </div>
 
-      {/* Optional Indicators (Dots) - Helpful to show movement */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentIndex(idx)} // Allow clicking dots to navigate
-            className={`h-2 rounded-full transition-all duration-300 ${
-              idx === currentIndex
-                ? "w-6 bg-white"
-                : "w-2 bg-white/50 hover:bg-white/80"
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
-      </div>
+      {/* Indicators */}
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === currentIndex
+                  ? "w-6 bg-white"
+                  : "w-2 bg-white/50 hover:bg-white/80"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
