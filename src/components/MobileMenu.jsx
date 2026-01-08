@@ -46,7 +46,6 @@ export default function MobileMenu({ nav, lang, setLang, t }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            // CHANGED: Reduced padding (p-4) and gap (gap-1)
             className="absolute top-20 left-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xl p-4 flex flex-col gap-1 z-50"
           >
             {/* Links */}
@@ -55,7 +54,6 @@ export default function MobileMenu({ nav, lang, setLang, t }) {
                 key={n.to}
                 to={n.to}
                 onClick={() => setIsOpen(false)}
-                // CHANGED: text-base (smaller), reduced vertical padding (py-2)
                 className="text-base font-medium text-gray-700 hover:text-rose-600 hover:bg-gray-50 py-2 px-2 rounded-lg transition-colors"
               >
                 {n.label}
@@ -65,15 +63,12 @@ export default function MobileMenu({ nav, lang, setLang, t }) {
             {/* Divider */}
             <div className="h-px bg-gray-100 my-1" />
 
-            {/* Language Switcher */}
-            <div className="flex items-center justify-between px-2 py-1">
-              <span className="text-gray-500 text-sm font-medium">
-                Language:
-              </span>
+            {/* Language Switcher (Centered, Label Removed) */}
+            <div className="flex justify-center py-2">
               <div className="flex bg-gray-100 p-0.5 rounded-full">
                 <button
                   onClick={() => setLang("bg")}
-                  className={`px-4 py-1 text-xs font-bold rounded-full transition-all ${
+                  className={`px-6 py-1.5 text-xs font-bold rounded-full transition-all ${
                     lang === "bg"
                       ? "bg-white text-gray-900 shadow-sm"
                       : "text-gray-500"
@@ -83,7 +78,7 @@ export default function MobileMenu({ nav, lang, setLang, t }) {
                 </button>
                 <button
                   onClick={() => setLang("en")}
-                  className={`px-4 py-1 text-xs font-bold rounded-full transition-all ${
+                  className={`px-6 py-1.5 text-xs font-bold rounded-full transition-all ${
                     lang === "en"
                       ? "bg-white text-gray-900 shadow-sm"
                       : "text-gray-500"
@@ -95,7 +90,6 @@ export default function MobileMenu({ nav, lang, setLang, t }) {
             </div>
 
             {/* Book Button */}
-            {/* CHANGED: Reduced margin (mt-1) and padding (py-2.5) */}
             <Link
               to="/contact"
               onClick={() => setIsOpen(false)}
