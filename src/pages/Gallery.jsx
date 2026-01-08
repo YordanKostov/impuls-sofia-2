@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "../lib/supabase"; // Make sure this path is correct
+import { supabase } from "../lib/supabase";
 import Container from "../components/Container";
 import { THEME } from "../theme";
+// 1. Import the hook
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // 2. Get the translations
+  const { t } = useLanguage();
+  const content = t.galleryPage;
 
   useEffect(() => {
     async function fetchGallery() {
@@ -14,7 +20,7 @@ export default function Gallery() {
         const { data, error } = await supabase
           .from("gallery_images")
           .select("*")
-          .order("order_index", { ascending: true }); // Ensure consistent ordering
+          .order("order_index", { ascending: true });
 
         if (error) {
           console.error("Error fetching gallery:", error);
@@ -36,29 +42,28 @@ export default function Gallery() {
       <Container>
         <div className="max-w-2xl">
           <h2 className={`text-3xl font-extrabold ${THEME.primary}`}>
-            Gallery
+            {content.title}
           </h2>
-          <p className="mt-2 text-[#3F4A87]/70">
-            Selected highlights from classes, showcases, and rehearsals.
-          </p>
+          <p className="mt-2 text-[#3F4A87]/70">{content.desc}</p>
         </div>
 
-        {/* Loading State (Optional but recommended) */}
+        {/* Loading State */}
         {loading ? (
           <div className="mt-10 h-48 flex items-center justify-center text-[#3F4A87]/50">
-            Loading images...
+            {content.loading}
           </div>
         ) : (
           <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
             {images.map((img) => (
               <motion.div
-                key={img.id} // Use the unique ID from Supabase
+                key={img.id}
                 whileHover={{ scale: 1.04 }}
-                className="relative overflow-hidden rounded-2xl bg-white shadow-md group" // Added 'group' here for hover effects
+                className="relative overflow-hidden rounded-2xl bg-white shadow-md group"
               >
                 <img
-                  src={img.image_url} // Use the column name from your DB
-                  alt={img.alt || "Gallery Image"}
+                  src={img.image_url}
+                  // Use translated fallback alt text
+                  alt={img.alt || content.defaultAlt}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
 

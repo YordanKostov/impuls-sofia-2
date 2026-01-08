@@ -6,31 +6,17 @@ import { THEME } from "../theme.js";
 import { supabase } from "../lib/supabase";
 import ImageCarousel from "../components/ImageCarousel";
 
-// Testimonial Data
-const TESTIMONIALS = [
-  {
-    name: "Sarah Jenkins",
-    role: "Parent",
-    quote:
-      "The confidence my daughter has gained here is priceless. The teachers are nurturing but professional.",
-  },
-  {
-    name: "Mike Chen",
-    role: "Adult Hip-Hop",
-    quote:
-      "I was nervous to start dancing at 28, but the vibe here is so welcoming. It’s the highlight of my week.",
-  },
-  {
-    name: "Elena Rodriguez",
-    role: "Ballet Student",
-    quote:
-      "Professional training in a family environment. The end-of-year showcase was absolutely magical.",
-  },
-];
+// 1. IMPORT THE HOOK (We do NOT import CONTENT or useState for lang here)
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Home() {
   const navigate = useNavigate();
   const [previewImages, setPreviewImages] = useState([]);
+
+  // 2. USE THE GLOBAL CONTEXT
+  // We get 't' directly from the "Brain" (Context).
+  // We do NOT use const [lang, setLang] = useState("bg") here anymore.
+  const { t } = useLanguage();
 
   useEffect(() => {
     supabase
@@ -55,34 +41,29 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-gray-900">
-                Find your rhythm. Own the stage.
+                {t.hero.title}
               </h1>
-              <p className="mt-4 text-gray-800 max-w-xl">
-                Join our welcoming community of dancers — classes for all ages
-                and levels. From beginner technique to advanced choreography, we
-                help you express your best self.
-              </p>
+              <p className="mt-4 text-gray-800 max-w-xl">{t.hero.subtitle}</p>
 
               <div className="mt-8 flex gap-4">
-                {/* --- UPDATED BUTTON --- */}
                 <button
                   onClick={() => navigate("/classes")}
                   className="px-7 py-3.5 rounded-full bg-gray-900 text-white font-semibold shadow-lg hover:bg-gray-800 hover:scale-105 transition-all duration-300"
                 >
-                  Explore classes
+                  {t.hero.btnPrimary}
                 </button>
 
                 <a
                   href="#gallery"
                   className="px-7 py-3.5 rounded-full border border-gray-300 text-gray-700 font-medium hover:border-gray-900 hover:text-gray-900 transition-all duration-300"
                 >
-                  View gallery
+                  {t.hero.btnSecondary}
                 </a>
               </div>
 
               <div className="mt-6 text-sm text-gray-600 font-medium flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                New: Free trial class for first-timers — sign up today.
+                {t.hero.newLabel}
               </div>
             </motion.div>
 
@@ -97,30 +78,14 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 2. WHY CHOOSE US (Dark Cards) */}
+      {/* 2. WHY CHOOSE US */}
       <section className="py-12">
         <Container>
           <h2 className="text-2xl font-semibold text-gray-900 mb-8">
-            Why choose us
+            {t.features.title}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Expert instructors",
-                desc: "Professional dancers with teaching experience across styles.",
-                icon: "🎓",
-              },
-              {
-                title: "Flexible schedule",
-                desc: "Morning, evening and weekend classes for busy families.",
-                icon: "⏰",
-              },
-              {
-                title: "Performances",
-                desc: "Showcases, competitions, and community events all year round.",
-                icon: "🎭",
-              },
-            ].map((feature, i) => (
+            {t.features.list.map((feature, i) => (
               <motion.div
                 key={i}
                 initial={{ y: 20, opacity: 0 }}
@@ -148,12 +113,14 @@ export default function Home() {
       <section id="gallery" className="py-12">
         <Container>
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-gray-900">Gallery</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              {t.gallery.title}
+            </h2>
             <Link
               to="/gallery"
               className="text-secondary text-sm hover:underline"
             >
-              See all
+              {t.gallery.seeAll}
             </Link>
           </div>
 
@@ -173,7 +140,7 @@ export default function Home() {
             ))}
             {previewImages.length === 0 && (
               <div className="col-span-full text-center py-10 text-gray-500">
-                Loading gallery preview...
+                {t.gallery.loading}
               </div>
             )}
           </div>
@@ -198,9 +165,11 @@ export default function Home() {
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-white/50">
-                <p className="text-gray-900 font-bold text-lg">Spring Term</p>
+                <p className="text-gray-900 font-bold text-lg">
+                  {t.splitSection.imageTag}
+                </p>
                 <p className="text-pink-600 font-medium text-sm">
-                  Enrollment Open Now
+                  {t.splitSection.imageSub}
                 </p>
               </div>
             </motion.div>
@@ -213,37 +182,18 @@ export default function Home() {
                 viewport={{ once: true }}
               >
                 <h2 className="text-4xl font-extrabold text-gray-900 leading-tight">
-                  A community that <br />
+                  {t.splitSection.titleStart} <br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
-                    moves together.
+                    {t.splitSection.titleHighlight}
                   </span>
                 </h2>
                 <p className="mt-6 text-lg text-gray-700 leading-relaxed">
-                  Whether you're training for a career on stage or just looking
-                  for a fun way to stay active, you belong here. We balance
-                  professional discipline with a supportive, family atmosphere.
+                  {t.splitSection.desc}
                 </p>
               </motion.div>
 
               <div className="mt-10 grid grid-cols-2 gap-6">
-                {[
-                  {
-                    value: "250+",
-                    label: "Active Students",
-                    color: "text-purple-600",
-                  },
-                  {
-                    value: "12",
-                    label: "Years Experience",
-                    color: "text-pink-600",
-                  },
-                  {
-                    value: "20+",
-                    label: "Weekly Classes",
-                    color: "text-blue-600",
-                  },
-                  { value: "100%", label: "Passion", color: "text-orange-500" },
-                ].map((stat, i) => (
+                {t.splitSection.stats.map((stat, i) => (
                   <motion.div
                     key={i}
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -266,20 +216,18 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 5. TESTIMONIALS (Dark Cards) */}
+      {/* 5. TESTIMONIALS */}
       <section className="py-16">
         <Container>
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-gray-900">
-              Heard on the dance floor
+              {t.testimonials.title}
             </h2>
-            <p className="mt-2 text-gray-600">
-              Real stories from our students and parents.
-            </p>
+            <p className="mt-2 text-gray-600">{t.testimonials.subtitle}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t, i) => (
+            {t.testimonials.list.map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ y: 20, opacity: 0 }}
@@ -293,16 +241,18 @@ export default function Home() {
 
                 <div className="mb-4 text-pink-400 text-4xl font-serif">❝</div>
                 <p className="text-gray-300 font-medium italic mb-6 relative z-10">
-                  "{t.quote}"
+                  "{item.quote}"
                 </p>
                 <div className="flex items-center gap-3 relative z-10">
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-sm">
-                    {t.name.charAt(0)}
+                    {item.name.charAt(0)}
                   </div>
                   <div>
-                    <div className="font-bold text-white text-sm">{t.name}</div>
+                    <div className="font-bold text-white text-sm">
+                      {item.name}
+                    </div>
                     <div className="text-xs text-gray-500 uppercase">
-                      {t.role}
+                      {item.role}
                     </div>
                   </div>
                 </div>
@@ -312,7 +262,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 6. FINAL CTA (Dark, Matching Style) */}
+      {/* 6. FINAL CTA */}
       <section className="py-16">
         <Container>
           <motion.div
@@ -326,17 +276,14 @@ export default function Home() {
 
             <div className="relative z-10 max-w-2xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">
-                Ready to start moving?
+                {t.cta.title}
               </h2>
-              <p className="text-gray-400 text-lg mb-8">
-                Your first class is on us. Book your free trial today and come
-                see why everyone loves our studio.
-              </p>
+              <p className="text-gray-400 text-lg mb-8">{t.cta.desc}</p>
               <button
                 onClick={() => navigate("/contact")}
                 className="px-10 py-4 bg-white text-gray-900 text-lg font-bold rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
               >
-                Book Free Trial
+                {t.cta.btn}
               </button>
             </div>
           </motion.div>

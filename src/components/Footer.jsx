@@ -3,17 +3,18 @@ import Container from "./Container.jsx";
 import instagram_logo from "../assets/instagram_logo.png";
 import facebook_logo from "../assets/facebook_logo.png";
 import logo from "../assets/logo.png";
+// 1. Import hook
+import { useLanguage } from "../context/LanguageContext.jsx";
 
 export default function Footer() {
+  // 2. Get content
+  const { t } = useLanguage();
+  const footer = t.footer; // Short helper variable
+
   return (
     <footer className="pb-6 pt-0">
       <Container>
-        {/* COMPACT GLASS CARD:
-           - Reduced padding: 'p-10' -> 'p-6 md:p-8'
-           - Tighter rounded corners: 'rounded-[2.5rem]' -> 'rounded-[2rem]'
-        */}
         <div className="bg-white/40 backdrop-blur-md border border-white/50 rounded-[2rem] p-6 md:p-8 shadow-sm">
-          {/* Reduced gap and margin: 'gap-10 mb-8' -> 'gap-6 mb-6' */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 mb-6">
             {/* Column 1: Brand */}
             <div className="md:col-span-1">
@@ -30,8 +31,7 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-gray-700 text-xs leading-relaxed mb-4 font-medium max-w-xs">
-                More than just a dance studio. We are a community dedicated to
-                movement, passion, and artistic growth.
+                {footer.desc}
               </p>
               <div className="flex gap-3">
                 <a
@@ -59,15 +59,16 @@ export default function Footer() {
 
             {/* Column 2: Studio */}
             <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">Studio</h3>
-              {/* Tightened list spacing: 'space-y-2' -> 'space-y-1.5' */}
+              <h3 className="font-bold text-gray-900 text-sm mb-3">
+                {footer.col1}
+              </h3>
               <ul className="space-y-1.5 text-xs text-gray-600 font-medium">
                 <li>
                   <Link
                     to="/about"
                     className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
                   >
-                    Our Story
+                    {footer.col1_links.story}
                   </Link>
                 </li>
                 <li>
@@ -75,7 +76,7 @@ export default function Footer() {
                     to="/classes"
                     className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
                   >
-                    Classes & Pricing
+                    {footer.col1_links.classes}
                   </Link>
                 </li>
                 <li>
@@ -83,7 +84,7 @@ export default function Footer() {
                     to="/gallery"
                     className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
                   >
-                    Gallery
+                    {footer.col1_links.gallery}
                   </Link>
                 </li>
                 <li>
@@ -91,7 +92,7 @@ export default function Footer() {
                     to="/news"
                     className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
                   >
-                    Latest News
+                    {footer.col1_links.news}
                   </Link>
                 </li>
               </ul>
@@ -99,24 +100,26 @@ export default function Footer() {
 
             {/* Column 3: Support */}
             <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">Support</h3>
+              <h3 className="font-bold text-gray-900 text-sm mb-3">
+                {footer.col2}
+              </h3>
               <ul className="space-y-1.5 text-xs text-gray-600 font-medium">
                 <li>
                   <Link
                     to="/contact"
                     className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
                   >
-                    Contact Us
+                    {footer.col2_links.contact}
                   </Link>
                 </li>
                 <li>
                   <span className="cursor-not-allowed opacity-50">
-                    Privacy Policy
+                    {footer.col2_links.privacy}
                   </span>
                 </li>
                 <li>
                   <span className="cursor-not-allowed opacity-50">
-                    Terms of Service
+                    {footer.col2_links.terms}
                   </span>
                 </li>
               </ul>
@@ -124,9 +127,11 @@ export default function Footer() {
 
             {/* Column 4: Visit */}
             <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">Visit Us</h3>
+              <h3 className="font-bold text-gray-900 text-sm mb-3">
+                {footer.col3}
+              </h3>
               <address className="not-italic text-xs text-gray-600 font-medium space-y-1.5">
-                <p>g.k. Mladost 2, ul. "Sv. Kipriyan" 236, 1799, Sofia</p>
+                <p>{footer.address}</p>
                 <p>
                   <a
                     href="mailto:info@impuls-sofia.com"
@@ -148,12 +153,11 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          {/* Reduced top padding: 'pt-6' -> 'pt-4' */}
           <div className="pt-4 border-t border-gray-200/50 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-500 font-medium">
             <div>
-              © {new Date().getFullYear()} Impuls Sofia. All rights reserved.
+              © {new Date().getFullYear()} Impuls Sofia. {footer.rights}
             </div>
-            <div>Made with ❤️ for dancers.</div>
+            <div>{footer.madeWith}</div>
           </div>
         </div>
       </Container>
