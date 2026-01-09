@@ -191,10 +191,17 @@ export const CONTENT = {
       form: {
         namePh: "Вашето Име",
         emailPh: "Вашият Email",
+        phonePh: "Вашият Телефон",
         msgPh: "Вашето Съобщение...",
         btn: "Изпрати",
         success: "Съобщението е изпратено успешно!",
-        error: "❌ Възникна грешка. Моля, опитайте отново.", // <--- ADD THIS
+        error: "❌ Възникна грешка. Моля, опитайте отново.",
+        validation: {
+          name: "Моля, въведете име",
+          email: "Моля, въведете валиден имейл",
+          phone: "Моля, въведете валиден телефон (само цифри)",
+          message: "Моля, напишете съобщение",
+        },
       },
       info: {
         addressLabel: "Адрес:",
@@ -226,10 +233,17 @@ export const CONTENT = {
       form: {
         namePh: "Your Name",
         emailPh: "Your Email",
+        phonePh: "Your Phone Number",
         msgPh: "Your Message...",
         btn: "Send Message",
         success: "Message sent successfully!",
-        error: "❌ Something went wrong. Please try again.", // <--- ADD THIS
+        error: "❌ Something went wrong. Please try again.",
+        validation: {
+          name: "Name is required",
+          email: "Valid email is required",
+          phone: "Valid phone number is required (digits only)",
+          message: "Message is required",
+        },
       },
       info: {
         addressLabel: "Address:",
