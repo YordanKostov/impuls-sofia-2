@@ -32,8 +32,7 @@ export default function Contact() {
         },
         body: JSON.stringify({
           // Replace this with import.meta.env.VITE_ACCESS_KEY if using .env
-          access_key: "YOUR_ACCESS_KEY_HERE",
-
+          access_key: import.meta.env.VITE_WEB3_ACCESS_KEY,
           name: data.name,
           email: data.email,
           message: data.message,
