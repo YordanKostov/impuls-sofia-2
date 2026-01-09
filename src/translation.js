@@ -189,11 +189,12 @@ export const CONTENT = {
       title: "Свържете се с нас",
       desc: "Имате въпроси за графика, групите или участия? Изпратете ни съобщение.",
       form: {
-        namePh: "Вашето име",
-        emailPh: "Имейл",
-        msgPh: "Съобщение",
-        btn: "Изпрати съобщение",
-        success: "Благодарим ви! Получихме вашето съобщение.",
+        namePh: "Вашето Име",
+        emailPh: "Вашият Email",
+        msgPh: "Вашето Съобщение...",
+        btn: "Изпрати",
+        success: "Съобщението е изпратено успешно!",
+        error: "❌ Възникна грешка. Моля, опитайте отново.", // <--- ADD THIS
       },
       info: {
         addressLabel: "Адрес:",
@@ -223,11 +224,12 @@ export const CONTENT = {
       title: "Get in touch",
       desc: "Questions about classes, schedule, or booking performances? Send us a message.",
       form: {
-        namePh: "Your name",
-        emailPh: "Email",
-        msgPh: "Message",
-        btn: "Send message",
-        success: "Thanks — we got your message!",
+        namePh: "Your Name",
+        emailPh: "Your Email",
+        msgPh: "Your Message...",
+        btn: "Send Message",
+        success: "Message sent successfully!",
+        error: "❌ Something went wrong. Please try again.", // <--- ADD THIS
       },
       info: {
         addressLabel: "Address:",
