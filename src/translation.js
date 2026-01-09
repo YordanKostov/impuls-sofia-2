@@ -5,8 +5,8 @@ export const CONTENT = {
     hero: {
       title: "Открий своя ритъм. Владей сцената.",
       subtitle:
-        "Присъединете се към нашата общност от танцьори — класове за всички възрасти и нива. От техника за начинаещи до хореография за напреднали.",
-      btnPrimary: "Разгледай класовете",
+        "Присъединете се към нашата общност от танцьори — групи за всички възрасти и нива. От техника за начинаещи до хореография за напреднали.",
+      btnPrimary: "Разгледай групите ни",
       btnSecondary: "Галерия",
       newLabel: "Ново: Безплатен пробен урок за начинаещи — запиши се днес.",
     },
@@ -20,7 +20,7 @@ export const CONTENT = {
         },
         {
           title: "Гъвкав график",
-          desc: "Сутрешни, вечерни и съботно-неделни класове за заети семейства.",
+          desc: "Сутрешни, вечерни и съботно-неделни групи за заети семейства.",
           icon: "⏰",
         },
         {
@@ -65,7 +65,7 @@ export const CONTENT = {
       stats: [
         { value: "250+", label: "Активни ученици", color: "text-purple-600" },
         { value: "12", label: "Години опит", color: "text-pink-600" },
-        { value: "20+", label: "Седмични класове", color: "text-blue-600" },
+        { value: "20+", label: "Седмични групи", color: "text-blue-600" },
         { value: "100%", label: "Страст", color: "text-orange-500" },
       ],
     },
@@ -73,7 +73,7 @@ export const CONTENT = {
       links: [
         { to: "/", label: "Начало" },
         { to: "/about", label: "За нас" },
-        { to: "/classes", label: "Класове" },
+        { to: "/classes", label: "Групи" },
         { to: "/gallery", label: "Галерия" },
         { to: "/news", label: "Новини" },
         { to: "/contact", label: "Контакти" },
@@ -86,7 +86,7 @@ export const CONTENT = {
       col1: "Студио",
       col1_links: {
         story: "Нашата история",
-        classes: "Класове и Цени",
+        classes: "Групи и Цени",
         gallery: "Галерия",
         news: "Последни новини",
       },
@@ -131,62 +131,48 @@ export const CONTENT = {
       btn: "Запази безплатен урок",
     },
     classesPage: {
-      title: "Нашите класове",
+      title: "Нашите групи",
       subtitle:
-        "Ние предлагаме разнообразие от класове — от балет и съвременен танц до хип-хоп и салса. Открийте правилното ниво за вас.",
+        "Ние предлагаме разнообразие от групи — от начинаещи до напреднали и състезатели. Открийте правилното ниво за вас.",
       labels: {
         level: "Ниво:",
-        duration: "Продължителност:",
+        schedule: "График:", // New label
         btn: "Запиши се",
       },
       list: [
         {
-          title: "Балет за начинаещи",
-          level: "Начинаещи",
-          desc: "Основи на класическия балет. Фокус върху стойка, позиции и музикалност.",
-          duration: "60 мин",
+          title: "Малки Звезди (Начинаещи)",
+          level: "Деца (5-10 г.)",
+          desc: "Изграждаме правилна стойка, ритъм и координация. Тук създаваме първите приятелства в залата.",
+          schedule: ["Понеделник и Четвъртък: 18:00 - 19:00"],
         },
         {
-          title: "Съвременен танц",
-          level: "Средно напреднали",
-          desc: "Изразителен стил, съчетаващ техника с импровизация и работа на пода.",
-          duration: "75 мин",
+          title: "Тийн Денс (Напреднали)",
+          level: "Тийнейджъри",
+          desc: "За тези, които искат повече. Учим сложни хореографии и работим върху самочувствието.",
+          schedule: ["Понеделник: 19:00 - 20:00", "Сряда: 18:00 - 19:00"],
         },
         {
-          title: "Хип-Хоп",
-          level: "Всички нива",
-          desc: "Високоенергичен клас с най-новите стъпки и хореографии от уличната култура.",
-          duration: "60 мин",
-        },
-        {
-          title: "Салса & Латино",
-          level: "Начинаещи",
-          desc: "Забавни социални танци. Научете се да водите и следвате с увереност.",
-          duration: "60 мин",
-        },
-        {
-          title: "Джаз техника",
-          level: "Напреднали",
-          desc: "Интензивна работа върху гъвкавост, пируети и скокове за сериозни танцьори.",
-          duration: "90 мин",
-        },
-        {
-          title: "Йога за танцьори",
-          level: "Отворено ниво",
-          desc: "Възстановяване и разтягане за подобряване на танцовата издръжливост.",
-          duration: "60 мин",
+          title: "Клуб Шампиони (Състезатели)",
+          level: "Спортен клуб",
+          desc: "Пътят към медалите! Професионални тренировки, спортни лагери и участия в турнири.",
+          schedule: [
+            "Сряда: 19:00 - 20:30",
+            "Петък: 18:00 - 21:00",
+            "Неделя: 14:30 - 16:00",
+          ],
         },
       ],
     },
     galleryPage: {
       title: "Галерия",
-      desc: "Избрани моменти от класове, спектакли и репетиции.",
+      desc: "Избрани моменти от тренировки, спектакли и репетиции.",
       loading: "Зареждане на изображения...",
       defaultAlt: "Снимка от галерията",
     },
     contactPage: {
       title: "Свържете се с нас",
-      desc: "Имате въпроси за графика, класовете или участия? Изпратете ни съобщение.",
+      desc: "Имате въпроси за графика, групите или участия? Изпратете ни съобщение.",
       form: {
         namePh: "Вашето име",
         emailPh: "Имейл",
@@ -280,49 +266,34 @@ export const CONTENT = {
     classesPage: {
       title: "Classes",
       subtitle:
-        "We offer a range of classes — from ballet and contemporary to hip hop and salsa. Find the right level for you.",
+        "We offer a wide range of classes — from beginners to advanced and competitive levels. Find the perfect fit for you.",
       labels: {
         level: "Level:",
-        duration: "Duration:",
+        schedule: "Schedule:", // New label
         btn: "Join",
       },
-
       list: [
         {
-          title: "Ballet 101",
-          level: "Beginner",
-          desc: "Foundations of classical ballet. Focus on posture, positions, and musicality.",
-          duration: "60 min",
+          title: "Little Stars (Beginners)",
+          level: "Kids (5-10 yrs)",
+          desc: "Building posture, rhythm, and coordination. Where the first dance friendships are made.",
+          schedule: ["Monday & Thursday: 18:00 - 19:00"],
         },
         {
-          title: "Contemporary Flow",
-          level: "Intermediate",
-          desc: "Expressive style combining technique with improvisation and floor work.",
-          duration: "75 min",
+          title: "Teen Dance (Advanced)",
+          level: "Teens",
+          desc: "For those who want more. We learn complex choreographies and work on confidence.",
+          schedule: ["Monday: 19:00 - 20:00", "Wednesday: 18:00 - 19:00"],
         },
         {
-          title: "Hip-Hop",
-          level: "All Levels",
-          desc: "High-energy class featuring the latest moves and choreography from street culture.",
-          duration: "60 min",
-        },
-        {
-          title: "Salsa & Latin",
-          level: "Beginner",
-          desc: "Fun social dancing. Learn to lead and follow with confidence.",
-          duration: "60 min",
-        },
-        {
-          title: "Jazz Technique",
-          level: "Advanced",
-          desc: "Intensive work on flexibility, turns, and leaps for serious dancers.",
-          duration: "90 min",
-        },
-        {
-          title: "Yoga for Dancers",
-          level: "Open Level",
-          desc: "Recovery and stretching to improve dance endurance and prevent injury.",
-          duration: "60 min",
+          title: "Champions Club (Competitive)",
+          level: "Sports Club",
+          desc: "The road to medals! Professional training, sports camps, and tournaments.",
+          schedule: [
+            "Wednesday: 19:00 - 20:30",
+            "Friday: 18:00 - 21:00",
+            "Sunday: 14:30 - 16:00",
+          ],
         },
       ],
     },
