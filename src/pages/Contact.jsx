@@ -1,23 +1,58 @@
+import { useState } from "react";
 import Container from "../components/Container";
 import { useForm } from "react-hook-form";
-// 1. Import the hook
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Contact() {
   const { register, handleSubmit, reset } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState(null); // 'success' or 'error'
 
-  // 2. Get the translations
   const { t } = useLanguage();
   const content = t.contactPage;
 
-  const onSubmit = (data) => {
-    // Use the translated success message
-    alert(content.form.success);
-    reset();
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    setFormStatus(null);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          // -----------------------------------------------------------
+          // 1. PASTE YOUR ACCESS KEY HERE
+          // -----------------------------------------------------------
+          access_key: import.meta.env.VITE_ACCESS_KEY,
+
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          subject: "New Message from Impuls Website", // Email subject line
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setFormStatus("success");
+        reset(); // Clear the form
+      } else {
+        setFormStatus("error");
+      }
+    } catch (error) {
+      console.error(error);
+      setFormStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <main className="py-20">
+    <main className="py-20 min-h-screen">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           {/* LEFT COLUMN: Form & Info */}
@@ -30,35 +65,58 @@ export default function Contact() {
             </p>
 
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
+              {/* Hidden honeypot field to prevent spam bots */}
               <input
-                {...register("name")}
+                type="checkbox"
+                name="botcheck"
+                className="hidden"
+                style={{ display: "none" }}
+                {...register("botcheck")}
+              ></input>
+
+              <input
+                {...register("name", { required: true })}
                 placeholder={content.form.namePh}
                 className="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-                required
               />
               <input
-                {...register("email")}
+                {...register("email", { required: true })}
                 placeholder={content.form.emailPh}
                 type="email"
                 className="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all"
-                required
               />
               <textarea
-                {...register("message")}
+                {...register("message", { required: true })}
                 placeholder={content.form.msgPh}
                 rows={5}
                 className="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all resize-none"
-                required
               ></textarea>
 
               <div>
                 <button
                   type="submit"
-                  className="px-8 py-4 rounded-full bg-rose-600 text-white font-bold shadow-lg hover:bg-rose-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  disabled={isSubmitting}
+                  className={`px-8 py-4 rounded-full font-bold shadow-lg transition-all duration-300 ${
+                    isSubmitting
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-rose-600 text-white hover:bg-rose-700 hover:shadow-xl hover:-translate-y-1"
+                  }`}
                 >
-                  {content.form.btn}
+                  {isSubmitting ? "..." : content.form.btn}
                 </button>
               </div>
+
+              {/* Success/Error Messages */}
+              {formStatus === "success" && (
+                <div className="p-4 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                  {content.form.success}
+                </div>
+              )}
+              {formStatus === "error" && (
+                <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                  Something went wrong. Please try again later.
+                </div>
+              )}
             </form>
 
             <div className="mt-10 pt-8 border-t border-gray-100 text-gray-600">
@@ -85,12 +143,17 @@ export default function Contact() {
           {/* RIGHT COLUMN: Map */}
           <div className="h-full min-h-[400px]">
             <div className="rounded-[2rem] overflow-hidden shadow-2xl h-full border border-gray-100 bg-gray-100 relative">
-              {/* I replaced the broken link with a functional Google Maps Embed for "Mladost 2" */}
+              {/* I added a working Google Map focused on Mladost 2 */}
               <iframe
-                title="map"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=%D0%A3%D0%BB.%20%D0%A1%D0%B2%D0%B5%D1%82%D0%B8%20%D0%9A%D0%B8%D0%BF%D1%80%D0%B8%D1%8F%D0%BD%20236%201799%20Sofia%2C%20Bulgaria&maptype=roadmap"
-                className="w-full h-full min-h-[300px] border-0"
-              />
+                title="Impuls Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2934.619066606394!2d23.376828576632486!3d42.648218971167446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa868f0445d44d%3A0xc367699732732943!2sMladost%202%2C%20Sofia!5e0!3m2!1sen!2sbg!4v1709289283721!5m2!1sen!2sbg"
+                width="100%"
+                height="100%"
+                style={{ border: 0, minHeight: "400px" }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
           </div>
         </div>
