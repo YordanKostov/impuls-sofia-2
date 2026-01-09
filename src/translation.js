@@ -36,24 +36,39 @@ export const CONTENT = {
       loading: "Зареждане на галерията...",
     },
     about: {
-      title: "Нашата история",
-      desc: "Основан през 2010 г., Импулс София се разрасна от малка група до оживен център за танцьори от всички възрасти. Нашата мисия е да възпитаваме креативност, техника и общност чрез радостта от движението.",
-      teamTitle: "Нашите инструктори",
-      // MOVE YOUR INSTRUCTOR DATA HERE:
+      title: "История и Философия",
+      // Detailed description with paragraphs
+      desc: `Клуб по спортни танци "Импулс" не е просто танцова школа – това е общност, изградена върху страст, дисциплина и любов към изкуството.
+
+Основан в сърцето на София, нашият клуб има дългогодишна история в създаването на шампиони и вдъхновяването на любители. Ние вярваме, че танцът е мощен инструмент за изграждане на характера. Чрез изучаването на Латиноамерикански и Стандартни танци, нашите ученици развиват не само физическа сила и координация, но и увереност, уважение и екипен дух.
+
+В залата на "Импулс" всеки е добре дошъл. За най-малките ние сме място за игри и нови приятелства. За тийнейджърите – среда за изява и спортно развитие. А за нашите състезатели – ковачница за победи на националната и световна сцена.
+
+Нашият екип от професионални треньори подхожда индивидуално към всеки танцьор, защото вярваме, че всеки има свой собствен ритъм на развитие.`,
+
+      teamTitle: "Нашият Екип",
       instructors: [
         {
-          name: "Мария Иванова",
-          role: "Главен хореограф",
+          name: "Петър Петров", // Example Name
+          role: "Главен Треньор & Основател",
           photo:
-            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+            "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?q=80&w=1000&auto=format&fit=crop",
+          bio: "Петър е многократен шампион на България по Латиноамерикански танци. С над 15 години педагогически опит, той създава методиката на обучение в клуба, която балансира строгата техника със забавлението.",
         },
         {
-          name: "Петър Петров",
-          role: "Хип-хоп инструктор",
+          name: "Елена Димитрова", // Example Name
+          role: "Трениор Стандартни Танци",
           photo:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+            "https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1000&auto=format&fit=crop",
+          bio: "Елена специализира в работата с деца и начинаещи двойки. Нейната суперсила е търпението и умението да обясни и най-сложните движения по достъпен начин.",
         },
-        // Add more instructors here...
+        {
+          name: "Георги Иванов", // Example Name
+          role: "Кондиционна Подготовка",
+          photo:
+            "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop",
+          bio: "Бивш лекоатлет, Георги се грижи за физическата издръжливост на нашите състезатели. Неговите тренировки са ключът към енергията, която показваме на дансинга.",
+        },
       ],
     },
     splitSection: {
@@ -361,23 +376,39 @@ export const CONTENT = {
     },
     // ... existing hero, navbar, footer ...
     about: {
-      title: "Our story",
-      desc: "Founded in 2010, Impuls Sofia has grown from a small community class to a vibrant hub for dancers of all ages. Our mission is to nurture creativity, technique, and community through joyful movement.",
-      teamTitle: "Our instructors",
+      title: "History & Philosophy",
+      // Detailed description with paragraphs
+      desc: `Dance Club "Impuls" is more than just a dance studio – it is a community built on passion, discipline, and a love for the art of movement.
+
+Founded in the heart of Sofia, our club has a rich history of creating champions and inspiring hobbyists alike. We believe that dance is a powerful tool for character building. Through the study of Latin and Standard ballroom dance, our students develop not only physical strength and coordination but also confidence, respect, and team spirit.
+
+In the "Impuls" studio, everyone is welcome. For our youngest members, we are a place for games and new friendships. For teenagers, an environment for expression and athletic growth. And for our competitive couples – a forge for victories on the national and world stage.
+
+Our team of professional coaches approaches every dancer individually because we believe that everyone has their own rhythm of development.`,
+
+      teamTitle: "Our Team",
       instructors: [
         {
-          name: "Maria Ivanova",
-          role: "Head Choreographer",
+          name: "Peter Petrov",
+          role: "Head Coach & Founder",
           photo:
-            "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+            "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?q=80&w=1000&auto=format&fit=crop",
+          bio: "Peter is a multiple-time National Champion in Latin American dances. With over 15 years of teaching experience, he created the club's methodology which balances strict technique with pure fun.",
         },
         {
-          name: "Petar Petrov",
-          role: "Hip-Hop Instructor",
+          name: "Elena Dimitrova",
+          role: "Standard Dance Coach",
           photo:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+            "https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1000&auto=format&fit=crop",
+          bio: "Elena specializes in working with children and beginner couples. Her superpower is patience and the ability to explain even the most complex moves in a simple way.",
         },
-        // Add more instructors here...
+        {
+          name: "Georgi Ivanov",
+          role: "Fitness & Conditioning",
+          photo:
+            "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop",
+          bio: "A former track athlete, Georgi takes care of the physical endurance of our competitors. His training sessions are the key to the energy we display on the dance floor.",
+        },
       ],
     },
     newsPage: {
