@@ -27,12 +27,11 @@ export default function Classes() {
               {/* Header */}
               <div className="mb-4">
                 <div className="font-bold text-xl text-gray-900">{c.title}</div>
-                <div className="text-sm font-medium text-pink-600 mt-1 uppercase tracking-wide">
-                  {content.labels.level} {c.level}
-                </div>
+
+                {/* --- REMOVED THE LEVEL/AGE DIV HERE --- */}
               </div>
 
-              {/* Description */}
+              {/* Description (Age is now included here) */}
               <p className="text-gray-600 leading-relaxed text-sm mb-6 flex-grow">
                 {c.desc}
               </p>
@@ -40,7 +39,6 @@ export default function Classes() {
               {/* Schedule Section */}
               <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
                 <div className="flex items-center gap-2 mb-2 text-gray-900 font-semibold text-sm">
-                  {/* Clock Icon */}
                   <svg
                     className="w-4 h-4 text-gray-500"
                     fill="none"
@@ -57,7 +55,6 @@ export default function Classes() {
                   {content.labels.schedule}
                 </div>
 
-                {/* Loop through the schedule lines */}
                 <div className="space-y-1">
                   {c.schedule.map((time, idx) => (
                     <div key={idx} className="text-sm text-gray-600">

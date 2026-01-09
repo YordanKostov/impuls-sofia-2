@@ -37,7 +37,6 @@ export const CONTENT = {
     },
     about: {
       title: "История и Философия",
-      // Detailed description with paragraphs
       desc: `Клуб по спортни танци "Импулс" не е просто танцова школа – това е общност, изградена върху страст, дисциплина и любов към изкуството.
 
 Основан в сърцето на София, нашият клуб има дългогодишна история в създаването на шампиони и вдъхновяването на любители. Ние вярваме, че танцът е мощен инструмент за изграждане на характера. Чрез изучаването на Латиноамерикански и Стандартни танци, нашите ученици развиват не само физическа сила и координация, но и увереност, уважение и екипен дух.
@@ -150,26 +149,22 @@ export const CONTENT = {
       subtitle:
         "Ние предлагаме разнообразие от групи — от начинаещи до напреднали и състезатели. Открийте правилното ниво за вас.",
       labels: {
-        level: "Ниво:",
-        schedule: "График:", // New label
+        schedule: "График:",
         btn: "Запиши се",
       },
       list: [
         {
-          title: "Малки Звезди (Начинаещи)",
-          level: "Деца (5-10 г.)",
-          desc: "Изграждаме правилна стойка, ритъм и координация. Тук създаваме първите приятелства в залата.",
+          title: "Начинаещи",
+          desc: "За деца от 5 до 13 години. Изграждаме правилна стойка, ритъм и координация. Тук създаваме първите приятелства в залата.",
           schedule: ["Понеделник и Четвъртък: 18:00 - 19:00"],
         },
         {
-          title: "Тийн Денс (Напреднали)",
-          level: "Тийнейджъри",
+          title: "Напреднали",
           desc: "За тези, които искат повече. Учим сложни хореографии и работим върху самочувствието.",
           schedule: ["Понеделник: 19:00 - 20:00", "Сряда: 18:00 - 19:00"],
         },
         {
-          title: "Клуб Шампиони (Състезатели)",
-          level: "Спортен клуб",
+          title: "Състезатели",
           desc: "Пътят към медалите! Професионални тренировки, спортни лагери и участия в турнири.",
           schedule: [
             "Сряда: 19:00 - 20:30",
@@ -194,7 +189,7 @@ export const CONTENT = {
         phonePh: "Вашият Телефон",
         msgPh: "Вашето Съобщение...",
         btn: "Изпрати",
-        success: "Съобщението е изпратено успешно!",
+        success: "✅ Съобщението е изпратено успешно!",
         error: "❌ Възникна грешка. Моля, опитайте отново.",
         validation: {
           name: "Моля, въведете име",
@@ -236,7 +231,7 @@ export const CONTENT = {
         phonePh: "Your Phone Number",
         msgPh: "Your Message...",
         btn: "Send Message",
-        success: "Message sent successfully!",
+        success: "✅ Message sent successfully!",
         error: "❌ Something went wrong. Please try again.",
         validation: {
           name: "Name is required",
@@ -299,26 +294,22 @@ export const CONTENT = {
       subtitle:
         "We offer a wide range of classes — from beginners to advanced and competitive levels. Find the perfect fit for you.",
       labels: {
-        level: "Level:",
-        schedule: "Schedule:", // New label
+        schedule: "Schedule:",
         btn: "Join",
       },
       list: [
         {
-          title: "Little Stars (Beginners)",
-          level: "Kids (5-10 yrs)",
-          desc: "Building posture, rhythm, and coordination. Where the first dance friendships are made.",
+          title: "Beginners",
+          desc: "For kids aged 5-13. Building posture, rhythm, and coordination. Where the first dance friendships are made.",
           schedule: ["Monday & Thursday: 18:00 - 19:00"],
         },
         {
-          title: "Teen Dance (Advanced)",
-          level: "Teens",
+          title: "Advanced",
           desc: "For those who want more. We learn complex choreographies and work on confidence.",
           schedule: ["Monday: 19:00 - 20:00", "Wednesday: 18:00 - 19:00"],
         },
         {
-          title: "Champions Club (Competitive)",
-          level: "Sports Club",
+          title: "Competitive",
           desc: "The road to medals! Professional training, sports camps, and tournaments.",
           schedule: [
             "Wednesday: 19:00 - 20:30",
@@ -390,10 +381,8 @@ export const CONTENT = {
       desc: "Your first class is on us. Book your free trial today and come see why everyone loves our studio.",
       btn: "Book Free Trial",
     },
-    // ... existing hero, navbar, footer ...
     about: {
       title: "History & Philosophy",
-      // Detailed description with paragraphs
       desc: `Dance Club "Impuls" is more than just a dance studio – it is a community built on passion, discipline, and a love for the art of movement.
 
 Founded in the heart of Sofia, our club has a rich history of creating champions and inspiring hobbyists alike. We believe that dance is a powerful tool for character building. Through the study of Latin and Standard ballroom dance, our students develop not only physical strength and coordination but also confidence, respect, and team spirit.
@@ -401,7 +390,6 @@ Founded in the heart of Sofia, our club has a rich history of creating champions
 In the "Impuls" studio, everyone is welcome. For our youngest members, we are a place for games and new friendships. For teenagers, an environment for expression and athletic growth. And for our competitive couples – a forge for victories on the national and world stage.
 
 Our team of professional coaches approaches every dancer individually because we believe that everyone has their own rhythm of development.`,
-
       teamTitle: "Our Team",
       instructors: [
         {
