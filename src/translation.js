@@ -49,25 +49,25 @@ export const CONTENT = {
       teamTitle: "Нашият Екип",
       instructors: [
         {
-          name: "Петър Петров", // Example Name
-          role: "Главен Треньор & Основател",
+          name: "Иван Райков",
+          role: "Главен Треньор",
           photo:
             "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?q=80&w=1000&auto=format&fit=crop",
-          bio: "Петър е многократен шампион на България по Латиноамерикански танци. С над 15 години педагогически опит, той създава методиката на обучение в клуба, която балансира строгата техника със забавлението.",
+          bio: "Двигателят на нашия състезателен отбор. Иван се фокусира изцяло върху развитието на състезателни двойки за национални и международни подиуми, изграждайки техника, дисциплина и шампионски манталитет.",
         },
         {
-          name: "Елена Димитрова", // Example Name
-          role: "Трениор Стандартни Танци",
+          name: "Николета Райкова",
+          role: "Главен Треньор",
           photo:
             "https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1000&auto=format&fit=crop",
-          bio: "Елена специализира в работата с деца и начинаещи двойки. Нейната суперсила е търпението и умението да обясни и най-сложните движения по достъпен начин.",
+          bio: "Николета работи върху стила и хореографията на напредналите двойки. С безкомпромисно око за детайла, тя превръща добрата техника във вълнуващо изкуство и помага на състезателите да открият своя уникален почерк.",
         },
         {
-          name: "Георги Иванов", // Example Name
-          role: "Кондиционна Подготовка",
+          name: "Петя Костова",
+          role: "Треньор",
           photo:
             "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop",
-          bio: "Бивш лекоатлет, Георги се грижи за физическата издръжливост на нашите състезатели. Неговите тренировки са ключът към енергията, която показваме на дансинга.",
+          bio: "Специалист в работата с най-малките и начинаещите. Нейната суперсила е търпението и умението да обясни и най-сложните движения по достъпен и забавен начин, палейки искрата към танца.",
         },
       ],
     },
@@ -389,25 +389,25 @@ Our team of professional coaches approaches every dancer individually because we
       teamTitle: "Our Team",
       instructors: [
         {
-          name: "Peter Petrov",
-          role: "Head Coach & Founder",
+          name: "Ivan Raikov",
+          role: "Head Coach",
           photo:
             "https://images.unsplash.com/photo-1504609773096-104ff2c73ba4?q=80&w=1000&auto=format&fit=crop",
-          bio: "Peter is a multiple-time National Champion in Latin American dances. With over 15 years of teaching experience, he created the club's methodology which balances strict technique with pure fun.",
+          bio: "The driving force behind our competitive team. Ivan focuses entirely on developing couples for national and international stages, building the technique, discipline, and mindset required for champions.",
         },
         {
-          name: "Elena Dimitrova",
-          role: "Standard Dance Coach",
+          name: "Nikoleta Raikova",
+          role: "Head Coach",
           photo:
             "https://images.unsplash.com/photo-1546213290-e1b492ab3eee?q=80&w=1000&auto=format&fit=crop",
-          bio: "Elena specializes in working with children and beginner couples. Her superpower is patience and the ability to explain even the most complex moves in a simple way.",
+          bio: "Nikoleta shapes the style and choreography of our advanced couples. With an uncompromising eye for detail, she transforms technical skill into captivating art, helping competitors find their unique signature.",
         },
         {
-          name: "Georgi Ivanov",
-          role: "Fitness & Conditioning",
+          name: "Petya Kostova",
+          role: "Coach",
           photo:
             "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1000&auto=format&fit=crop",
-          bio: "A former track athlete, Georgi takes care of the physical endurance of our competitors. His training sessions are the key to the energy we display on the dance floor.",
+          bio: "Our specialist for kids and beginners. Her superpower is patience and the ability to explain even the most complex moves in a simple, fun way, sparking the love for dance in our newest members.",
         },
       ],
     },
