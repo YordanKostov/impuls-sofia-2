@@ -5,28 +5,39 @@ import Container from "../components/Container.jsx";
 import { THEME } from "../theme.js";
 import { supabase } from "../lib/supabase";
 import ImageCarousel from "../components/ImageCarousel";
-
-// 1. IMPORT THE HOOK (We do NOT import CONTENT or useState for lang here)
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Home() {
   const navigate = useNavigate();
-  const [previewImages, setPreviewImages] = useState([]);
 
-  // 2. USE THE GLOBAL CONTEXT
-  // We get 't' directly from the "Brain" (Context).
-  // We do NOT use const [lang, setLang] = useState("bg") here anymore.
+  // State for the Top Carousel (Array of URL strings)
+  const [heroImages, setHeroImages] = useState([]);
+  // State for the Bottom Gallery Grid (Array of Album objects)
+  const [previewAlbums, setPreviewAlbums] = useState([]);
+
   const { t } = useLanguage();
 
   useEffect(() => {
-    supabase
-      .from("gallery_images")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(4)
-      .then(({ data }) => {
-        if (data) setPreviewImages(data);
-      });
+    async function fetchHomeImages() {
+      // CHANGED: Fetch from 'albums' table instead of 'gallery_images'
+      const { data, error } = await supabase
+        .from("albums")
+        .select("id, cover_url, title")
+        .order("created_at", { ascending: false }) // Newest albums first
+        .limit(10);
+
+      if (error) {
+        console.error("Error loading home albums:", error);
+      } else if (data) {
+        // 1. Carousel needs a simple list of strings
+        setHeroImages(data.map(album => album.cover_url));
+
+        // 2. Grid needs the full object (id, title, cover_url)
+        setPreviewAlbums(data.slice(0, 4));
+      }
+    }
+
+    fetchHomeImages();
   }, []);
 
   return (
@@ -67,18 +78,19 @@ export default function Home() {
               </div>
             </motion.div>
 
+            {/* Carousel showing Album Covers */}
             <motion.div
               initial={{ scale: 0.98, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <ImageCarousel />
+              <ImageCarousel externalImages={heroImages} />
             </motion.div>
           </div>
         </Container>
       </section>
 
-      {/* 2. WHY CHOOSE US */}
+      {/* 2. WHY CHOOSE US (Unchanged) */}
       <section className="py-12">
         <Container>
           <h2 className="text-2xl font-semibold text-gray-900 mb-8">
@@ -109,7 +121,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 3. GALLERY PREVIEW */}
+      {/* 3. GALLERY PREVIEW (Updated to use Albums) */}
       <section id="gallery" className="py-12">
         <Container>
           <div className="flex items-center justify-between">
@@ -125,33 +137,40 @@ export default function Home() {
           </div>
 
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-            {previewImages.map((img, i) => (
-              <motion.div
-                key={img.id || i}
-                whileHover={{ scale: 1.03 }}
-                className="overflow-hidden rounded-lg bg-gray-100 shadow-sm"
-              >
-                <img
-                  src={img.image_url}
-                  alt={img.alt || `gallery-${i}`}
-                  className="w-full h-44 object-cover"
-                />
-              </motion.div>
+            {previewAlbums.map((album, i) => (
+              <Link to="/gallery" key={album.id || i}>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="overflow-hidden rounded-lg bg-gray-100 shadow-sm relative group cursor-pointer"
+                >
+                  <img
+                    src={album.cover_url} // <--- Using cover_url now
+                    alt={album.title}
+                    className="w-full h-44 object-cover"
+                  />
+                  {/* Optional: Show album title on hover */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                    <span className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity text-sm px-2 text-center">
+                      {album.title}
+                    </span>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
-            {previewImages.length === 0 && (
-              <div className="col-span-full text-center py-10 text-gray-500">
-                {t.gallery.loading}
+
+            {previewAlbums.length === 0 && (
+              <div className="col-span-full text-center py-10 text-gray-500 italic">
+                Checking for albums...
               </div>
             )}
           </div>
         </Container>
       </section>
 
-      {/* 4. STATS & FEATURE SPLIT */}
+      {/* 4. STATS & FEATURE SPLIT (Unchanged) */}
       <section className="py-16">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* LEFT: Feature Image */}
             <motion.div
               initial={{ x: -50, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
@@ -174,7 +193,6 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* RIGHT: Content & Stats */}
             <div>
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -187,7 +205,7 @@ export default function Home() {
                     className="inline-block text-transparent bg-clip-text"
                     style={{
                       backgroundImage:
-                        "linear-gradient(to right, #db2777, #9333ea)", // Pink-600 to Purple-600
+                        "linear-gradient(to right, #db2777, #9333ea)",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
                     }}
@@ -224,7 +242,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 5. TESTIMONIALS */}
+      {/* 5. TESTIMONIALS (Unchanged) */}
       <section className="py-16">
         <Container>
           <div className="text-center mb-10">
@@ -246,7 +264,6 @@ export default function Home() {
                 className="p-8 rounded-3xl bg-gray-900 shadow-xl relative overflow-hidden group"
               >
                 <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 -translate-x-1/2 -translate-y-1/2"></div>
-
                 <div className="mb-4 text-pink-400 text-4xl font-serif">❝</div>
                 <p className="text-gray-300 font-medium italic mb-6 relative z-10">
                   "{item.quote}"
@@ -270,7 +287,7 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 6. FINAL CTA */}
+      {/* 6. FINAL CTA (Unchanged) */}
       <section className="py-16">
         <Container>
           <motion.div
@@ -281,7 +298,6 @@ export default function Home() {
           >
             <div className="absolute top-0 left-0 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
             <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2"></div>
-
             <div className="relative z-10 max-w-2xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">
                 {t.cta.title}

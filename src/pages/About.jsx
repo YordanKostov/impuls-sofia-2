@@ -17,7 +17,6 @@ export default function About() {
       <section className="pt-24 pb-20">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            {/* items-center usually looks better with a tall image so text stays in middle */}
 
             {/* Text Side */}
             <motion.div
@@ -45,7 +44,7 @@ export default function About() {
             >
               <div className="absolute -inset-4 bg-white/40 rounded-[3rem] blur-xl -z-10"></div>
 
-              {/* UPDATED: Increased height to 500px (mobile) and 600px (desktop) */}
+              {/* Height: 500px mobile, 600px desktop */}
               <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/50 h-[500px] md:h-[600px]">
                 <ImageCarousel
                   externalImages={studioPhotos}
@@ -57,60 +56,7 @@ export default function About() {
         </Container>
       </section>
 
-      {/* SECTION 2: INSTRUCTORS */}
-      <section className="py-8">
-        <Container>
-          <div className="text-center mb-12">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-3xl font-extrabold text-gray-900"
-            >
-              {content.teamTitle}
-            </motion.h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {content.instructors.map((ins, i) => (
-              <motion.div
-                key={ins.name}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-3xl overflow-hidden shadow-lg border border-white/50 flex flex-col h-full group"
-              >
-                <div className="h-72 overflow-hidden relative">
-                  <img
-                    src={ins.photo}
-                    alt={ins.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90"></div>
-
-                  <div className="absolute bottom-0 left-0 p-5 text-white w-full">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-pink-400 mb-1">
-                      {ins.role}
-                    </p>
-                    <h3 className="text-xl font-bold leading-tight">
-                      {ins.name}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="p-5 flex-grow">
-                  <p className="text-gray-600 leading-relaxed text-sm">
-                    {ins.bio ||
-                      "Professional instructor dedicated to dance excellence."}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </Container>
-      </section>
+      {/* REMOVED: INSTRUCTORS SECTION */}
     </main>
   );
 }

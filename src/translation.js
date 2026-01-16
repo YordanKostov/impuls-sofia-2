@@ -37,13 +37,16 @@ export const CONTENT = {
     },
     about: {
       title: "История и Философия",
-      desc: `Клуб по спортни танци "Импулс" не е просто танцова школа – това е общност, изградена върху страст, дисциплина и любов към изкуството.
+      desc: `Клуб по спортни танци „Импулс – София“ е създаден с много любов, вдъхновение и стремеж към професионален растеж. Основан през 2017 г., клубът се развива динамично и с всяка изминала година танцовото ни семейство се разраства с нови членове.
 
-Основан в сърцето на София, нашият клуб има дългогодишна история в създаването на шампиони и вдъхновяването на любители. Ние вярваме, че танцът е мощен инструмент за изграждане на характера. Чрез изучаването на Латиноамерикански и Стандартни танци, нашите ученици развиват не само физическа сила и координация, но и увереност, уважение и екипен дух.
+Нашите състезатели постигат все по-високи резултати, а за изминалите 9 години клубът може да се похвали с множество републикански шампионски и вицешампионски титли във всички възрастови категории – деца, юноши, младежи, състезатели до 19 и до 21 години, в латиноамерикански и стандартни танци, както и в многобой.
 
-В залата на "Импулс" всеки е добре дошъл. За най-малките ние сме място за игри и нови приятелства. За тийнейджърите – среда за изява и спортно развитие. А за нашите състезатели – ковачница за победи на националната и световна сцена.
+През последните години успехите ни се утвърждават и на международната сцена. Наши възпитаници станаха двукратни вицешампиони в стандартни танци и многобой в категория до 21 години, а клубът има и множество финалисти и полуфиналисти на световни първенства.
 
-Нашият екип от професионални треньори подхожда индивидуално към всеки танцьор, защото вярваме, че всеки има свой собствен ритъм на развитие.`,
+Днес „Импулс – София“ се гордее с над 50 активни състезатели, носители на престижни отличия от национални и международни турнири.
+
+Зад успехите на всички танцови двойки и соло дами стоят безброй часове труд, упоритост, желание, страст, любов към танца и пълна отдаденост.
+`,
 
       teamTitle: "Нашият Екип",
       instructors: [
@@ -141,7 +144,7 @@ export const CONTENT = {
     },
     cta: {
       title: "Готови ли сте да се раздвижите?",
-      desc: "Първият урок е от нас. Запазете своя безплатен пробен час днес и вижте защо всички обичат нашето студио.",
+      desc: "Първият урок е от нас. Запазете своя безплатен пробен час днес и вижте защо всички обичат нашият клуб.",
       btn: "Запази безплатен урок",
     },
     classesPage: {
@@ -207,7 +210,7 @@ export const CONTENT = {
     newsPage: {
       title: "Новини",
       subtitle:
-        "Бъдете в крак с последните събития, участия и истории от нашето студио.",
+        "Бъдете в крак с последните събития и участия от нашия клуб.",
       loading: "Зареждане на новини...",
       empty: "Все още няма публикувани новини.",
       readMore: "Прочети статията",
@@ -320,7 +323,7 @@ export const CONTENT = {
       ],
     },
     footer: {
-      desc: "More than just a dance studio. We are a community dedicated to movement, passion, and artistic growth.",
+      desc: "More than just a dance club. We are a community dedicated to movement, passion, and artistic growth.",
       col1: "Studio",
       col1_links: {
         story: "Our Story",
@@ -378,18 +381,20 @@ export const CONTENT = {
     },
     cta: {
       title: "Ready to start moving?",
-      desc: "Your first class is on us. Book your free trial today and come see why everyone loves our studio.",
+      desc: "Your first class is on us. Book your free trial today and come see why everyone loves our club.",
       btn: "Book Free Trial",
     },
     about: {
       title: "History & Philosophy",
-      desc: `Dance Club "Impuls" is more than just a dance studio – it is a community built on passion, discipline, and a love for the art of movement.
+      desc: `Sports Dance Club "Impuls – Sofia" was created with much love, inspiration, and aspiration towards professional growth. Founded in 2017, the club develops dynamically, and with every passing year, our dance family expands with new members.
 
-Founded in the heart of Sofia, our club has a rich history of creating champions and inspiring hobbyists alike. We believe that dance is a powerful tool for character building. Through the study of Latin and Standard ballroom dance, our students develop not only physical strength and coordination but also confidence, respect, and team spirit.
+Our competitors achieve ever-higher results, and for the past 9 years, the club can boast of a multitude of national champion and vice-champion titles in all age categories – children, juniors, youths, competitors under 19 and under 21 years, in Latin American and Standard dances, as well as in all-around.
 
-In the "Impuls" studio, everyone is welcome. For our youngest members, we are a place for games and new friendships. For teenagers, an environment for expression and athletic growth. And for our competitive couples – a forge for victories on the national and world stage.
+During the last years, our successes are establishing themselves on the international scene as well. Our trainees became two-time vice-champions in standard dances and all-around in the under-21 category, and the club also has a multitude of finalists and semi-finalists at world championships.
 
-Our team of professional coaches approaches every dancer individually because we believe that everyone has their own rhythm of development.`,
+Today "Impuls – Sofia" prides itself on over 50 active competitors, bearers of prestigious distinctions from national and international tournaments.
+
+Behind the successes of all dance couples and solo ladies stand countless hours of labor, persistence, desire, passion, love for the dance, and full dedication.`,
       teamTitle: "Our Team",
       instructors: [
         {
@@ -418,7 +423,7 @@ Our team of professional coaches approaches every dancer individually because we
     newsPage: {
       title: "News",
       subtitle:
-        "Keep up with the latest events, performances, and stories from our studio.",
+        "Keep up with the latest events and performances from our club.",
       loading: "Loading news...",
       empty: "No news published yet.",
       readMore: "Read article",
