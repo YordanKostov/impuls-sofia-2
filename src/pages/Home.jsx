@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "../components/Container.jsx";
-import { THEME } from "../theme.js";
 import { supabase } from "../lib/supabase";
 import ImageCarousel from "../components/ImageCarousel";
 import { useLanguage } from "../context/LanguageContext";
@@ -41,7 +40,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={`${THEME.gradient} min-h-screen overflow-hidden`}>
+    <main className="min-h-screen overflow-hidden">
       {/* 1. HERO SECTION */}
       <section className="py-20 md:py-28">
         <Container>

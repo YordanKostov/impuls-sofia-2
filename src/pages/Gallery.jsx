@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import Container from "../components/Container";
-import { THEME } from "../theme";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Gallery() {
@@ -95,10 +94,10 @@ export default function Gallery() {
   }, [selectedAlbum, nextImage, prevImage]);
 
   return (
-    <main className={`py-20 ${THEME.bg} min-h-screen`}>
+    <main className="py-20 min-h-screen">
       <Container>
         <div className="max-w-2xl mb-12">
-          <h2 className={`text-3xl font-extrabold ${THEME.primary}`}>
+          <h2 className="text-3xl font-extrabold">
             {content.title}
           </h2>
           <p className="mt-2 text-[#3F4A87]/70">{content.desc}</p>

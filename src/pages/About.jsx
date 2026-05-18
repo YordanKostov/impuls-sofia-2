@@ -1,7 +1,6 @@
 import Container from "../components/Container";
 import { useLanguage } from "../context/LanguageContext";
 import { motion } from "framer-motion";
-import { THEME } from "../theme.js";
 import ImageCarousel from "../components/ImageCarousel";
 
 export default function About() {
@@ -12,7 +11,7 @@ export default function About() {
   const studioPhotos = ["/studio/studio.png", "/studio/studio1.png"];
 
   return (
-    <main className={`${THEME.gradient} min-h-screen pb-20`}>
+    <main className="min-h-screen pb-20">
       {/* SECTION 1: STUDIO STORY */}
       <section className="pt-24 pb-20">
         <Container>
