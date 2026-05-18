@@ -15,7 +15,7 @@ export default function Gallery() {
   const [loadingImages, setLoadingImages] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const content = t.galleryPage;
 
   // 1. FETCH ALBUMS (The Covers)
@@ -96,16 +96,31 @@ export default function Gallery() {
   return (
     <main className="py-20 min-h-screen">
       <Container>
-        <div className="max-w-2xl mb-12">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mb-12"
+        >
           <h2 className="text-3xl font-extrabold">
             {content.title}
           </h2>
           <p className="mt-2 text-[#3F4A87]/70">{content.desc}</p>
-        </div>
+        </motion.div>
 
         {loading ? (
-          <div className="mt-10 h-48 flex items-center justify-center text-[#3F4A87]/50">
-            {content.loading}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 animate-pulse">
+                <div className="h-64 bg-gray-200" />
+                <div className="p-6 space-y-3">
+                  <div className="h-5 bg-gray-200 rounded w-3/4" />
+                  <div className="h-4 bg-gray-100 rounded w-full" />
+                  <div className="h-4 bg-gray-100 rounded w-2/3" />
+                  <div className="mt-4 h-4 bg-pink-100 rounded w-1/3" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
           /* --- ALBUM GRID --- */
@@ -113,9 +128,13 @@ export default function Gallery() {
             {albums.length === 0 ? (
               <div className="text-gray-500 italic">No albums found.</div>
             ) : (
-              albums.map((album) => (
+              albums.map((album, i) => (
                 <motion.div
                   key={album.id}
+                  initial={{ y: 24, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.07, duration: 0.45 }}
                   whileHover={{ y: -5 }}
                   onClick={() => openAlbum(album)}
                   className="group cursor-pointer bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100"
@@ -142,7 +161,7 @@ export default function Gallery() {
                       </p>
                     )}
                     <div className="mt-4 flex items-center text-pink-600 font-bold text-sm">
-                      {t.lang === 'bg' ? 'Разгледай албума' : 'View Album'}
+                      {lang === 'bg' ? 'Разгледай албума' : 'View Album'}
                       <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
@@ -176,21 +195,25 @@ export default function Gallery() {
             </button>
 
             {loadingImages ? (
-              <div className="text-white/70 animate-pulse">Loading photos...</div>
+              <div className="text-white/70 animate-pulse">
+                {lang === 'bg' ? 'Зареждане...' : 'Loading...'}
+              </div>
             ) : (
               <>
                 {/* Prev Button */}
                 {albumImages.length > 1 && (
                   <button
                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                    className="absolute left-4 md:left-8 text-white/50 hover:text-white p-3 rounded-full hover:bg-white/10 transition-all z-50"
+                    className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-3 rounded-full hover:bg-white/10 transition-all z-50"
                   >
-                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
                   </button>
                 )}
 
                 {/* Main Image */}
-                <div className="relative w-full h-full flex flex-col items-center justify-center p-4 md:p-10 pointer-events-none">
+                <div className="relative w-full h-full flex items-center justify-center p-4 md:p-10 pb-36 pointer-events-none">
                   {albumImages.length > 0 ? (
                     <motion.img
                       key={currentImageIndex}
@@ -198,33 +221,60 @@ export default function Gallery() {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.2 }}
                       src={albumImages[currentImageIndex].image_url}
-                      className="max-h-[80vh] max-w-full object-contain rounded-md shadow-2xl pointer-events-auto select-none"
+                      className="max-h-[68vh] max-w-full object-contain rounded-md shadow-2xl pointer-events-auto select-none"
                       onClick={(e) => e.stopPropagation()}
+                      draggable="false"
                     />
                   ) : (
-                    <p className="text-white/50">No images in this album yet.</p>
+                    <p className="text-white/50">
+                      {lang === 'bg' ? 'Няма снимки в този албум.' : 'No images in this album yet.'}
+                    </p>
                   )}
+                </div>
 
-                  {/* Caption */}
-                  <div className="absolute bottom-6 left-0 right-0 text-center">
-                    <h3 className="text-white text-xl font-bold tracking-wide drop-shadow-md">
+                {/* Bottom bar: title + counter + thumbnail strip */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent pt-16 pb-5 px-4 flex flex-col items-center gap-3 pointer-events-none">
+                  <div className="text-center">
+                    <h3 className="text-white text-lg font-bold tracking-wide drop-shadow-md">
                       {selectedAlbum.title}
                     </h3>
                     {albumImages.length > 0 && (
-                      <p className="text-white/60 text-sm mt-1">
+                      <p className="text-white/60 text-sm mt-0.5">
                         {currentImageIndex + 1} / {albumImages.length}
                       </p>
                     )}
                   </div>
+                  {albumImages.length > 1 && (
+                    <div
+                      className="flex gap-2 overflow-x-auto max-w-[80vw] pb-1 pointer-events-auto"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {albumImages.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                          className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden transition-all duration-200 ${
+                            idx === currentImageIndex
+                              ? 'ring-2 ring-white opacity-100 scale-105'
+                              : 'opacity-40 hover:opacity-70'
+                          }`}
+                        >
+                          <img src={img.image_url} alt="" className="w-full h-full object-cover" draggable="false" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Next Button */}
                 {albumImages.length > 1 && (
                   <button
                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                    className="absolute right-4 md:right-8 text-white/50 hover:text-white p-3 rounded-full hover:bg-white/10 transition-all z-50"
+                    className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/50 hover:text-white p-3 rounded-full hover:bg-white/10 transition-all z-50"
                   >
-                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </button>
                 )}
               </>

@@ -159,7 +159,7 @@ export default function Home() {
 
             {previewAlbums.length === 0 && (
               <div className="col-span-full text-center py-10 text-gray-500 italic">
-                Checking for albums...
+                {t.gallery.loading}
               </div>
             )}
           </div>
@@ -200,15 +200,7 @@ export default function Home() {
               >
                 <h2 className="text-4xl font-extrabold text-gray-900 leading-tight">
                   {t.splitSection.titleStart} <br />
-                  <span
-                    className="inline-block text-transparent bg-clip-text"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(to right, #db2777, #9333ea)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                    }}
-                  >
+                  <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
                     {t.splitSection.titleHighlight}
                   </span>
                 </h2>

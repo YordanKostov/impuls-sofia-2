@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import Container from "../components/Container";
 import ImageCarousel from "../components/ImageCarousel";
 import { useLanguage } from "../context/LanguageContext";
+import { motion } from "framer-motion";
 
 export default function Article() {
   const { slug } = useParams();
@@ -73,24 +74,40 @@ export default function Article() {
   return (
     <main className="py-20 min-h-screen">
       <Container>
-        <Link
-          to="/news"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-rose-600 mb-8 transition-colors"
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4 }}
         >
-          ← {t === "bg" ? "Назад към новини" : "Back to News"}
-        </Link>
+          <Link
+            to="/news"
+            className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-rose-600 mb-8 transition-colors"
+          >
+            ← {t === "bg" ? "Назад към новини" : "Back to News"}
+          </Link>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Carousel */}
-          <div className="lg:sticky lg:top-24">
+          <motion.div
+            initial={{ x: -40, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="lg:sticky lg:top-24"
+          >
             <ImageCarousel
               externalImages={allImages}
               className="aspect-square md:aspect-[4/5] h-auto shadow-lg rounded-xl overflow-hidden"
             />
-          </div>
+          </motion.div>
 
           {/* Text Content */}
-          <div className="prose prose-lg prose-rose max-w-none">
+          <motion.div
+            initial={{ x: 40, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="prose prose-lg prose-rose max-w-none"
+          >
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
               {article.title}
             </h1>
@@ -100,7 +117,7 @@ export default function Article() {
             <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
               {article.content}
             </div>
-          </div>
+          </motion.div>
         </div>
       </Container>
     </main>

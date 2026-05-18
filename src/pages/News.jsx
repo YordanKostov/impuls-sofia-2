@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
-import Container from "../components/Container"; // Added for consistent margins
-// 1. Import the hook
+import Container from "../components/Container";
 import { useLanguage } from "../context/LanguageContext";
+import { motion } from "framer-motion";
 
 export default function News() {
   const [articles, setArticles] = useState([]);
@@ -32,20 +32,31 @@ export default function News() {
   return (
     <main className="py-20 min-h-screen">
       <Container>
-        <div className="max-w-2xl mb-12">
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mb-12"
+        >
           <h1 className="text-4xl font-extrabold text-gray-900">
             {content.title}
           </h1>
           <p className="mt-3 text-gray-600 text-lg">{content.subtitle}</p>
-        </div>
+        </motion.div>
 
         {loading ? (
           <div className="text-gray-500 py-10">{content.loading}</div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((a) => (
-              <Link
+            {articles.map((a, i) => (
+              <motion.div
                 key={a.slug}
+                initial={{ y: 24, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.45 }}
+              >
+              <Link
                 to={`/news/${a.slug}`}
                 className="group block h-full"
               >
@@ -93,6 +104,7 @@ export default function News() {
                   </div>
                 </article>
               </Link>
+              </motion.div>
             ))}
           </div>
         )}

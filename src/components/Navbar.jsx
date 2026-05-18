@@ -1,5 +1,5 @@
 import Container from "./Container.jsx";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import MobileMenu from "./MobileMenu.jsx";
 import logo from "../assets/logo.png";
 import { useLanguage } from "../context/LanguageContext";
@@ -32,13 +32,20 @@ export default function Navbar() {
           {/* Desktop Menu (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-6">
             {nav.map((n) => (
-              <Link
+              <NavLink
                 key={n.to}
                 to={n.to}
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                end={n.to === "/"}
+                className={({ isActive }) =>
+                  `text-sm font-medium transition-colors ${
+                    isActive
+                      ? "text-pink-600 font-semibold"
+                      : "text-gray-500 hover:text-gray-900"
+                  }`
+                }
               >
                 {n.label}
-              </Link>
+              </NavLink>
             ))}
 
             {/* Desktop Language Switcher */}
