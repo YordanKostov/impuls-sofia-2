@@ -26,25 +26,24 @@ export default function HeroSlideshow({ slides, className = "" }) {
   const current = slides[index];
 
   return (
-    <div className={`relative ${className}`}>
-      {/* Glow: a blurred copy of the current photo behind the frame */}
-      <div className="absolute inset-4 -z-10" aria-hidden="true">
-        <AnimatePresence initial={false}>
-          {current && (
-            <motion.img
-              key={current.src}
-              src={current.src}
-              alt=""
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.55, transition: { duration: 1.2 } }}
-              exit={{ opacity: 0, transition: { duration: 1.2 } }}
-              className="absolute inset-0 h-full w-full translate-y-6 scale-110 object-cover blur-3xl"
-            />
-          )}
-        </AnimatePresence>
+    <div className={`relative isolate ${className}`}>
+      {/* Glow: blurred copies of every photo stay mounted and simply crossfade,
+          so switching never re-blurs (and flashes) a freshly loaded image */}
+      <div className="pointer-events-none absolute inset-2 z-0" aria-hidden="true">
+        {slides.map((slide, i) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt=""
+            decoding="async"
+            className={`absolute inset-0 h-full w-full translate-y-8 scale-105 object-cover blur-[48px] saturate-150 transition-opacity duration-[1200ms] ease-out ${
+              i === index ? "opacity-90" : "opacity-0"
+            }`}
+          />
+        ))}
       </div>
 
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-100 shadow-lift">
+      <div className="relative z-10 aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-100 shadow-lift">
         {!current && <div className="skeleton absolute inset-0 rounded-none" />}
         <AnimatePresence initial={false}>
           {current && (
