@@ -260,13 +260,24 @@ export default function Home() {
                 decoding="async"
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute bottom-5 left-5 rounded-2xl bg-paper/90 px-5 py-3.5 shadow-soft backdrop-blur-md">
-                <p className="font-display text-2xl font-semibold leading-tight text-ink">
-                  {t.splitSection.imageTag}
-                </p>
-                <p className="text-sm font-semibold text-mint-600">
-                  {t.splitSection.imageSub}
-                </p>
+              {/* New-groups announcement */}
+              <div className="absolute inset-x-4 bottom-4 flex flex-col gap-4 rounded-3xl bg-ink-950/90 p-5 text-white shadow-lift ring-1 ring-mint/30 backdrop-blur-md sm:inset-x-5 sm:bottom-5 sm:flex-row sm:items-end sm:justify-between sm:p-6">
+                <div>
+                  <p className="mb-2 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-mint">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
+                    </span>
+                    {t.splitSection.imageSub}
+                  </p>
+                  <p className="font-display text-3xl font-semibold leading-tight md:text-4xl">
+                    {t.splitSection.imageTag}
+                  </p>
+                </div>
+                <Link to="/contact" className="btn-light shrink-0 px-5 py-2.5 text-sm">
+                  {t.classesPage.labels.btn}
+                  <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </motion.div>
 
