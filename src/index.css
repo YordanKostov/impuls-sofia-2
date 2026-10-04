@@ -1,3 +1,99 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper font-sans text-ink-900 antialiased;
+    font-size: 1.0625rem;
+  }
+
+  /* Watercolour wash behind every page, echoing the logo */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60rem 40rem at 105% -10%, rgba(143, 217, 200, 0.42), transparent 60%),
+      radial-gradient(45rem 35rem at -10% 35%, rgba(169, 175, 207, 0.28), transparent 62%),
+      radial-gradient(50rem 40rem at 85% 105%, rgba(194, 234, 223, 0.5), transparent 60%);
+  }
+
+  ::selection {
+    @apply bg-mint text-ink-950;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ink-700 ring-offset-2 ring-offset-paper;
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .display {
+    @apply font-display font-semibold leading-[0.98] tracking-[-0.01em] text-ink;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-ink-700;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-mint-600;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[0.95rem] font-bold tracking-wide transition-all duration-300 active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply btn bg-ink text-white shadow-soft hover:-translate-y-0.5 hover:bg-ink-900 hover:shadow-lift;
+  }
+  .btn-outline {
+    @apply btn border border-ink/25 text-ink hover:border-ink hover:bg-white/60;
+  }
+  .btn-light {
+    @apply btn bg-mint text-ink-950 hover:-translate-y-0.5 hover:bg-white;
+  }
+
+  .card {
+    @apply rounded-3xl border border-ink/10 bg-white/70 shadow-soft backdrop-blur-sm;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border border-ink/15 bg-white/70 px-4 py-3.5 text-ink-900 outline-none transition-all placeholder:text-ink-300 focus:border-ink-700 focus:bg-white focus:ring-4 focus:ring-mint/40;
+  }
+  .field-error {
+    @apply border-red-400 bg-red-50/60 focus:border-red-500 focus:ring-red-200;
+  }
+
+  .link-arrow {
+    @apply inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.14em] text-ink-700 transition-colors hover:text-ink;
+  }
+
+  .skeleton {
+    @apply animate-pulse rounded-2xl bg-ink-100/70;
+  }
+}

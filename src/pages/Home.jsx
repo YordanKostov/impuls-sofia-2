@@ -1,309 +1,383 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Container from "../components/Container.jsx";
 import { supabase } from "../lib/supabase";
-import ImageCarousel from "../components/ImageCarousel";
+import HeroSlideshow from "../components/HeroSlideshow";
 import { useLanguage } from "../context/LanguageContext";
+import usePageTitle from "../hooks/usePageTitle";
+
+const STUDIO_PHOTOS = ["/studio/studio.webp", "/studio/studio1.webp"];
+
+const reveal = {
+  initial: { y: 24, opacity: 0 },
+  whileInView: { y: 0, opacity: 1 },
+  viewport: { once: true, margin: "-60px" },
+};
+
+function SectionHeading({ children, className = "" }) {
+  return (
+    <h2 className={`display text-4xl md:text-6xl ${className}`}>{children}</h2>
+  );
+}
 
 export default function Home() {
-  const navigate = useNavigate();
-
-  // State for the Top Carousel (Array of URL strings)
-  const [heroImages, setHeroImages] = useState([]);
-  // State for the Bottom Gallery Grid (Array of Album objects)
-  const [previewAlbums, setPreviewAlbums] = useState([]);
+  // Newest albums: covers feed the hero carousel, the first four the preview grid
+  const [albums, setAlbums] = useState([]);
+  const [albumsLoaded, setAlbumsLoaded] = useState(false);
 
   const { t } = useLanguage();
+  usePageTitle(t.hero.eyebrow);
 
   useEffect(() => {
+    let ignore = false;
+
     async function fetchHomeImages() {
-      // CHANGED: Fetch from 'albums' table instead of 'gallery_images'
       const { data, error } = await supabase
         .from("albums")
         .select("id, cover_url, title")
-        .order("created_at", { ascending: false }) // Newest albums first
-        .limit(10);
+        .order("created_at", { ascending: false })
+        .limit(6);
 
-      if (error) {
-        console.error("Error loading home albums:", error);
-      } else if (data) {
-        // 1. Carousel needs a simple list of strings
-        setHeroImages(data.map(album => album.cover_url));
-
-        // 2. Grid needs the full object (id, title, cover_url)
-        setPreviewAlbums(data.slice(0, 4));
-      }
+      if (ignore) return;
+      if (error) console.error("Error loading home albums:", error);
+      setAlbums((data || []).filter((album) => album.cover_url));
+      setAlbumsLoaded(true);
     }
 
     fetchHomeImages();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
+  // Album covers (captioned with the album title); studio photos if there are none
+  const heroSlides = albums.length
+    ? albums.map((album) => ({ src: album.cover_url, caption: album.title }))
+    : albumsLoaded
+      ? STUDIO_PHOTOS.map((src) => ({ src }))
+      : [];
+  const previewAlbums = albums.slice(0, 4);
+
+  // "IMPULS – SOFIA" -> "IMPULS" / "– SOFIA" on two lines
+  const [brandFirst, brandRest] = t.hero.brand.split(/\s(?=[–-])/);
+
   return (
-    <main className="min-h-screen overflow-hidden">
-      {/* 1. HERO SECTION */}
-      <section className="py-20 md:py-28">
+    <div className="overflow-x-clip">
+      {/* 1. HERO SECTION: copy + portrait photo slideshow */}
+      <section className="pb-6 pt-8 md:pb-10 md:pt-14">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-16">
             <motion.div
-              initial={{ x: -40, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-gray-900">
-                {t.hero.title}
+              <div className="eyebrow mb-5">{t.hero.title}</div>
+              <h1 className="text-[3.4rem] font-semibold uppercase leading-[0.9] tracking-[-0.02em] text-ink sm:text-7xl xl:text-8xl">
+                {brandFirst}
+                {brandRest && (
+                  <span className="block text-ink-700">
+                    {/* Colours taken from the logo: mint dash, indigo name */}
+                    <span className="text-mint">{brandRest.slice(0, 1)}</span>
+                    {brandRest.slice(1)}
+                  </span>
+                )}
               </h1>
-              <p className="mt-4 text-gray-800 max-w-xl">{t.hero.subtitle}</p>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-500 lg:text-xl">
+                {t.hero.subtitle}
+              </p>
 
-              <div className="mt-8 flex gap-4">
-                <button
-                  onClick={() => navigate("/classes")}
-                  className="px-7 py-3.5 rounded-full bg-gray-900 text-white font-semibold shadow-lg hover:bg-gray-800 hover:scale-105 transition-all duration-300"
-                >
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link to="/classes" className="btn-primary">
                   {t.hero.btnPrimary}
-                </button>
-
-                <a
-                  href="#gallery"
-                  className="px-7 py-3.5 rounded-full border border-gray-300 text-gray-700 font-medium hover:border-gray-900 hover:text-gray-900 transition-all duration-300"
-                >
+                  <span aria-hidden="true">→</span>
+                </Link>
+                <Link to="/gallery" className="btn-outline">
                   {t.hero.btnSecondary}
-                </a>
+                </Link>
               </div>
 
-              <div className="mt-6 text-sm text-gray-600 font-medium flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <Link
+                to="/contact"
+                className="mt-7 inline-flex items-center gap-3 rounded-full border border-mint-200 bg-mint-50/80 py-2 pl-3 pr-5 text-sm font-semibold text-ink transition-colors hover:bg-mint-100"
+              >
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint-600 opacity-60" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-mint-600" />
+                </span>
                 {t.hero.newLabel}
-              </div>
+              </Link>
             </motion.div>
 
-            {/* Carousel showing Album Covers */}
             <motion.div
-              initial={{ scale: 0.98, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.6 }}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="order-first mx-auto w-full max-w-md md:order-none md:max-w-none"
             >
-              <ImageCarousel externalImages={heroImages} />
+              <HeroSlideshow slides={heroSlides} />
             </motion.div>
           </div>
         </Container>
       </section>
 
-      {/* 2. WHY CHOOSE US (Unchanged) */}
-      <section className="py-12">
+      {/* 2. WHY CHOOSE US */}
+      <section className="pb-20 pt-14 md:pb-28 md:pt-20">
         <Container>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-8">
-            {t.features.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div {...reveal}>
+            <SectionHeading>{t.features.title}</SectionHeading>
+          </motion.div>
+          <div className="mt-12 grid grid-cols-1 border-t border-ink/15 md:grid-cols-3">
             {t.features.list.map((feature, i) => (
               <motion.div
                 key={i}
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-gray-900 p-8 rounded-3xl shadow-xl relative overflow-hidden group"
+                {...reveal}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="group border-b border-ink/15 py-8 md:border-b-0 md:border-l md:px-8 md:py-10 md:first:border-l-0 md:first:pl-0"
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 -translate-y-1/2 translate-x-1/2"></div>
-                <div className="text-4xl mb-4 relative z-10">
-                  {feature.icon}
+                <div className="font-display text-6xl font-medium italic text-mint-600 transition-transform duration-500 group-hover:-translate-y-1">
+                  0{i + 1}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 relative z-10">
+                <h3 className="mt-6 text-xl font-bold text-ink">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400 relative z-10">{feature.desc}</p>
+                <p className="mt-2 leading-relaxed text-ink-500">
+                  {feature.desc}
+                </p>
               </motion.div>
             ))}
           </div>
         </Container>
       </section>
 
-      {/* 3. GALLERY PREVIEW (Updated to use Albums) */}
-      <section id="gallery" className="py-12">
-        <Container>
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-gray-900">
-              {t.gallery.title}
-            </h2>
-            <Link
-              to="/gallery"
-              className="text-secondary text-sm hover:underline"
-            >
-              {t.gallery.seeAll}
-            </Link>
-          </div>
-
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-            {previewAlbums.map((album, i) => (
-              <Link to="/gallery" key={album.id || i}>
-                <motion.div
-                  whileHover={{ scale: 1.03 }}
-                  className="overflow-hidden rounded-lg bg-gray-100 shadow-sm relative group cursor-pointer"
-                >
-                  <img
-                    src={album.cover_url} // <--- Using cover_url now
-                    alt={album.title}
-                    className="w-full h-44 object-cover"
-                  />
-                  {/* Optional: Show album title on hover */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
-                    <span className="text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity text-sm px-2 text-center">
-                      {album.title}
-                    </span>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
-
-            {previewAlbums.length === 0 && (
-              <div className="col-span-full text-center py-10 text-gray-500 italic">
-                {t.gallery.loading}
+      {/* 3. DANCES WE TEACH */}
+      <section className="relative mb-20 overflow-hidden bg-ink-950 py-16 text-white md:mb-28 md:py-20">
+        <div
+          className="absolute -left-32 top-0 h-80 w-80 rounded-full bg-mint/15 blur-3xl"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-ink-500/30 blur-3xl"
+          aria-hidden="true"
+        />
+        <Container className="relative">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
+            {t.dances.map((group, g) => (
+              <div key={group.label}>
+                <h2 className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-mint">
+                  <span className="font-display text-2xl font-medium normal-case italic tracking-normal">
+                    0{g + 1}
+                  </span>
+                  {group.label}
+                </h2>
+                <ul>
+                  {group.list.map((dance, i) => (
+                    <motion.li
+                      key={dance}
+                      initial={{ x: -16, opacity: 0 }}
+                      whileInView={{ x: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.07, duration: 0.45 }}
+                      className="group flex items-baseline justify-between gap-4 border-t border-white/10 py-2.5 last:border-b md:py-3"
+                    >
+                      <span className="font-display text-2xl font-medium text-white/90 transition-all duration-300 group-hover:translate-x-2 group-hover:italic group-hover:text-mint sm:text-3xl md:text-4xl">
+                        {dance}
+                      </span>
+                      <span className="text-xs font-bold tabular-nums text-white/30 transition-colors group-hover:text-mint">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </motion.li>
+                  ))}
+                </ul>
               </div>
-            )}
+            ))}
           </div>
         </Container>
       </section>
 
-      {/* 4. STATS & FEATURE SPLIT (Unchanged) */}
-      <section className="py-16">
+      {/* 4. GALLERY PREVIEW */}
+      {(!albumsLoaded || previewAlbums.length > 0) && (
+      <section id="gallery" className="pb-20 md:pb-28">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="flex items-end justify-between gap-6">
+            <SectionHeading>{t.gallery.title}</SectionHeading>
+            <Link to="/gallery" className="link-arrow shrink-0 pb-2">
+              {t.gallery.seeAll} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
+            {!albumsLoaded &&
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="skeleton aspect-[3/4] md:even:mt-10" />
+              ))}
+
+            {previewAlbums.map((album, i) => (
+              <motion.div
+                key={album.id}
+                {...reveal}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="md:even:mt-10"
+              >
+                <Link
+                  to="/gallery"
+                  className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-ink-100 shadow-soft"
+                >
+                  <img
+                    src={album.cover_url}
+                    alt={album.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-ink-950/80 via-ink-950/10 to-transparent p-4">
+                    <span className="font-display text-xl font-semibold leading-tight text-white">
+                      {album.title}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </Container>
+      </section>
+      )}
+
+      {/* 5. STATS & FEATURE SPLIT */}
+      <section className="pb-20 md:pb-28">
+        <Container>
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <motion.div
-              initial={{ x: -50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative h-[500px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl group"
+              {...reveal}
+              transition={{ duration: 0.7 }}
+              className="group relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-lift sm:aspect-[4/3] lg:aspect-[4/5]"
             >
               <img
-                src="https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1887&auto=format&fit=crop"
-                alt="Dancers stretching"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                src="/studio/studio.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute bottom-8 left-8 bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-lg border border-white/50">
-                <p className="text-gray-900 font-bold text-lg">
+              <div className="absolute bottom-5 left-5 rounded-2xl bg-paper/90 px-5 py-3.5 shadow-soft backdrop-blur-md">
+                <p className="font-display text-2xl font-semibold leading-tight text-ink">
                   {t.splitSection.imageTag}
                 </p>
-                <p className="text-pink-600 font-medium text-sm">
+                <p className="text-sm font-semibold text-mint-600">
                   {t.splitSection.imageSub}
                 </p>
               </div>
             </motion.div>
 
             <div>
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-4xl font-extrabold text-gray-900 leading-tight">
-                  {t.splitSection.titleStart} <br />
-                  <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
+              <motion.div {...reveal}>
+                <SectionHeading>
+                  {t.splitSection.titleStart}{" "}
+                  <em className="font-medium text-ink-700">
                     {t.splitSection.titleHighlight}
-                  </span>
-                </h2>
-                <p className="mt-6 text-lg text-gray-700 leading-relaxed">
+                  </em>
+                </SectionHeading>
+                <p className="mt-6 text-lg leading-relaxed text-ink-500">
                   {t.splitSection.desc}
                 </p>
               </motion.div>
 
-              <div className="mt-10 grid grid-cols-2 gap-6">
+              <dl className="mt-10 grid grid-cols-2 border-t border-ink/15">
                 {t.splitSection.stats.map((stat, i) => (
                   <motion.div
                     key={i}
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true }}
+                    {...reveal}
                     transition={{ delay: i * 0.1, duration: 0.5 }}
-                    className="p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-white/40 shadow-sm hover:bg-white/80 transition-colors"
+                    className="flex flex-col-reverse border-b border-ink/15 py-6 odd:pr-6 even:border-l even:pl-6"
                   >
-                    <div className={`text-3xl font-black ${stat.color}`}>
-                      {stat.value}
-                    </div>
-                    <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mt-1">
+                    <dt className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-ink-500">
                       {stat.label}
-                    </div>
+                    </dt>
+                    <dd className="font-display text-5xl font-semibold text-ink md:text-6xl">
+                      {stat.value}
+                    </dd>
                   </motion.div>
                 ))}
-              </div>
+              </dl>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* 5. TESTIMONIALS (Unchanged) */}
-      <section className="py-16">
+      {/* 6. TESTIMONIALS */}
+      <section className="pb-20 md:pb-28">
         <Container>
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900">
-              {t.testimonials.title}
-            </h2>
-            <p className="mt-2 text-gray-600">{t.testimonials.subtitle}</p>
-          </div>
+          <motion.div {...reveal} className="mb-12 max-w-2xl">
+            <SectionHeading>{t.testimonials.title}</SectionHeading>
+            <p className="mt-4 text-lg text-ink-500">
+              {t.testimonials.subtitle}
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {t.testimonials.list.map((item, i) => (
-              <motion.div
+              <motion.figure
                 key={i}
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                whileHover={{ y: -5 }}
-                className="p-8 rounded-3xl bg-gray-900 shadow-xl relative overflow-hidden group"
+                {...reveal}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
+                className="card flex flex-col p-8 md:[&:nth-child(2)]:translate-y-8"
               >
-                <div className="absolute top-0 left-0 w-32 h-32 bg-purple-500 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 -translate-x-1/2 -translate-y-1/2"></div>
-                <div className="mb-4 text-pink-400 text-4xl font-serif">❝</div>
-                <p className="text-gray-300 font-medium italic mb-6 relative z-10">
-                  "{item.quote}"
-                </p>
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-sm">
+                <div
+                  className="font-display text-7xl leading-[0.6] text-mint-600"
+                  aria-hidden="true"
+                >
+                  “
+                </div>
+                <blockquote className="mt-2 flex-grow font-display text-2xl font-medium italic leading-snug text-ink">
+                  {item.quote}
+                </blockquote>
+                <figcaption className="mt-8 flex items-center gap-3 border-t border-ink/10 pt-5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-sm font-bold text-white">
                     {item.name.charAt(0)}
                   </div>
                   <div>
-                    <div className="font-bold text-white text-sm">
-                      {item.name}
-                    </div>
-                    <div className="text-xs text-gray-500 uppercase">
+                    <div className="text-sm font-bold text-ink">{item.name}</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-ink-500">
                       {item.role}
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </figcaption>
+              </motion.figure>
             ))}
           </div>
         </Container>
       </section>
 
-      {/* 6. FINAL CTA (Unchanged) */}
-      <section className="py-16">
+      {/* 7. FINAL CTA */}
+      <section className="pt-8">
         <Container>
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            className="relative rounded-[3rem] overflow-hidden bg-gray-900 text-center py-16 px-6 shadow-2xl"
+            {...reveal}
+            className="relative overflow-hidden rounded-[2.5rem] bg-ink px-6 py-16 text-center shadow-lift md:py-24"
           >
-            <div className="absolute top-0 left-0 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 translate-x-1/2 translate-y-1/2"></div>
-            <div className="relative z-10 max-w-2xl mx-auto">
-              <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-6">
+            <div
+              className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-mint/30 blur-3xl"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute -bottom-32 -right-16 h-96 w-96 rounded-full bg-ink-500/50 blur-3xl"
+              aria-hidden="true"
+            />
+            <div className="relative mx-auto max-w-2xl">
+              <h2 className="font-display text-5xl font-semibold leading-none text-white md:text-7xl">
                 {t.cta.title}
               </h2>
-              <p className="text-gray-400 text-lg mb-8">{t.cta.desc}</p>
-              <button
-                onClick={() => navigate("/contact")}
-                className="px-10 py-4 bg-white text-gray-900 text-lg font-bold rounded-full hover:bg-gray-100 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-              >
+              <p className="mx-auto mb-9 mt-6 max-w-xl text-lg text-ink-100/80">
+                {t.cta.desc}
+              </p>
+              <Link to="/contact" className="btn-light px-9 py-4 text-base">
                 {t.cta.btn}
-              </button>
+              </Link>
             </div>
           </motion.div>
         </Container>
       </section>
-    </main>
+    </div>
   );
 }

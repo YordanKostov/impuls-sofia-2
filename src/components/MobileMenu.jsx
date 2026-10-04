@@ -1,102 +1,82 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import LanguageSwitch from "./LanguageSwitch.jsx";
 
-export default function MobileMenu({ nav, lang, setLang, t }) {
+export default function MobileMenu({ nav, t }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  // Close on navigation
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => e.key === "Escape" && setIsOpen(false);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       {/* Hamburger Button */}
       <button
-        onClick={toggleMenu}
-        className="p-2 text-gray-600 hover:text-gray-900 focus:outline-none"
-        aria-label="Toggle menu"
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        className="-mr-2 rounded-full p-2.5 text-ink transition-colors hover:bg-ink/5"
+        aria-label={t.navbar.menu}
+        aria-expanded={isOpen}
+        aria-controls="mobile-menu"
       >
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
-          {isOpen ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          )}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.75}
+            d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 7h16M4 12h16M4 17h10"}
+          />
         </svg>
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            id="mobile-menu"
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-20 left-0 w-full bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xl p-4 flex flex-col gap-1 z-50"
+            className="absolute inset-x-0 top-full z-50 mt-2 flex flex-col gap-1 rounded-3xl border border-ink/10 bg-paper p-4 shadow-lift"
           >
-            {/* Links */}
             {nav.map((n) => (
-              <Link
+              <NavLink
                 key={n.to}
                 to={n.to}
-                onClick={() => setIsOpen(false)}
-                className="text-base font-medium text-gray-700 hover:text-rose-600 hover:bg-gray-50 py-2 px-2 rounded-lg transition-colors"
+                end={n.to === "/"}
+                className={({ isActive }) =>
+                  `rounded-2xl px-4 py-2.5 font-display text-2xl font-semibold transition-colors ${
+                    isActive ? "bg-mint-100 text-ink" : "text-ink-700 hover:bg-ink/5"
+                  }`
+                }
               >
                 {n.label}
-              </Link>
+              </NavLink>
             ))}
 
-            {/* Divider */}
-            <div className="h-px bg-gray-100 my-1" />
-
-            {/* Language Switcher (Centered, Label Removed) */}
-            <div className="flex justify-center py-2">
-              <div className="flex bg-gray-100 p-0.5 rounded-full">
-                <button
-                  onClick={() => setLang("bg")}
-                  className={`px-6 py-1.5 text-xs font-bold rounded-full transition-all ${
-                    lang === "bg"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500"
-                  }`}
-                >
-                  BG
-                </button>
-                <button
-                  onClick={() => setLang("en")}
-                  className={`px-6 py-1.5 text-xs font-bold rounded-full transition-all ${
-                    lang === "en"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500"
-                  }`}
-                >
-                  EN
-                </button>
-              </div>
+            <div className="mt-3 flex items-center justify-between gap-3 border-t border-ink/10 pt-4">
+              <LanguageSwitch size="lg" />
+              <Link to="/contact" className="btn-primary flex-1 px-5 py-2.5 text-sm">
+                {t.navbar.bookBtn}
+              </Link>
             </div>
-
-            {/* Book Button */}
-            <Link
-              to="/contact"
-              onClick={() => setIsOpen(false)}
-              className="mt-1 w-full text-center py-2.5 rounded-full bg-gray-900 text-white font-bold text-sm shadow-md active:scale-95 transition-transform"
-            >
-              {t.navbar.bookBtn}
-            </Link>
           </motion.div>
         )}
       </AnimatePresence>

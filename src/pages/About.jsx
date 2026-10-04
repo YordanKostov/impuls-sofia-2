@@ -2,60 +2,63 @@ import Container from "../components/Container";
 import { useLanguage } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 import ImageCarousel from "../components/ImageCarousel";
+import usePageTitle from "../hooks/usePageTitle";
+
+const studioPhotos = ["/studio/studio.webp", "/studio/studio1.webp"];
 
 export default function About() {
   const { t } = useLanguage();
   const content = t.about;
+  usePageTitle(content.title);
 
-  // Make sure these are valid paths in your public folder
-  const studioPhotos = ["/studio/studio.png", "/studio/studio1.png"];
+  const [lead, ...paragraphs] = content.desc
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
   return (
-    <main className="min-h-screen pb-20">
-      {/* SECTION 1: STUDIO STORY */}
-      <section className="pt-24 pb-20">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section className="py-12 md:py-20">
+      <Container>
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Text Side */}
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7"
+          >
+            <div className="eyebrow mb-5">Impuls Sofia · 2017</div>
+            <h1 className="display text-5xl md:text-7xl">{content.title}</h1>
 
-            {/* Text Side */}
-            <motion.div
-              initial={{ x: -30, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight mb-5">
-                {content.title}
-              </h1>
+            <p className="mt-8 font-display text-2xl font-medium leading-snug text-ink md:text-3xl">
+              {lead}
+            </p>
+            <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink-900/75">
+              {paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+            </div>
+          </motion.div>
 
-              <div className="w-16 h-1.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full mb-6" />
-
-              <div className="space-y-4 text-base text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {content.desc}
-              </div>
-            </motion.div>
-
-            {/* Image Side */}
-            <motion.div
-              initial={{ x: 30, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="absolute -inset-4 bg-white/40 rounded-[3rem] blur-xl -z-10"></div>
-
-              {/* Height: 500px mobile, 600px desktop */}
-              <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/50 h-[500px] md:h-[600px]">
-                <ImageCarousel
-                  externalImages={studioPhotos}
-                  className="h-full w-full"
-                />
-              </div>
-            </motion.div>
-          </div>
-        </Container>
-      </section>
-
-      {/* REMOVED: INSTRUCTORS SECTION */}
-    </main>
+          {/* Image Side */}
+          <motion.div
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="relative lg:sticky lg:top-28 lg:col-span-5"
+          >
+            <div
+              className="absolute inset-0 rotate-3 rounded-[2rem] bg-mint-200/70"
+              aria-hidden="true"
+            />
+            <ImageCarousel
+              images={studioPhotos}
+              priority
+              className="relative aspect-[4/5] rounded-[2rem] shadow-lift"
+            />
+          </motion.div>
+        </div>
+      </Container>
+    </section>
   );
 }

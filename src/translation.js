@@ -1,35 +1,45 @@
-// src/textData.js
-
 export const CONTENT = {
   bg: {
     hero: {
-      title: "Открий своя ритъм. Владей сцената.",
+      eyebrow: "Клуб по спортни танци · София",
+      title: "Клуб по спортни танци",
+      brand: "IMPULS – SOFIA",
       subtitle:
-        "Присъединете се към нашата общност от танцьори — групи за всички възрасти и нива. От техника за начинаещи до хореография за напреднали.",
+        "Заедно танцуваме, учим, растем и постигаме успехи – станете част от нашето семейство.",
       btnPrimary: "Разгледай групите ни",
       btnSecondary: "Галерия",
-      newLabel: "Ново: Безплатен пробен урок за начинаещи — запиши се днес.",
+      newLabel: "Безплатен първи урок – запиши се днес.",
     },
     features: {
       title: "Защо да изберете нас",
       list: [
         {
-          title: "Експертни инструктори",
-          desc: "Професионални танцьори с опит в преподаването на различни стилове.",
+          title: "Експертни треньори",
+          desc: "Нашият екип от опитни треньори работи с отдаденост и професионализъм, за да вдъхновява децата и да развива техните умения, увереност и любов към спортните танци.",
           icon: "🎓",
         },
         {
           title: "Гъвкав график",
-          desc: "Сутрешни, вечерни и съботно-неделни групи за заети семейства.",
+          desc: "Предлагаме групови тренировки за всички нива на подготовка, както и индивидуални уроци, съобразени с нуждите и целите на всеки танцьор.",
           icon: "⏰",
         },
         {
-          title: "Изяви и спектакли",
-          desc: "Годишни концерти, състезания и събития през цялата година.",
+          title: "Състезания и концертни изяви",
+          desc: "Клубът участва в национални и международни състезания и организира концерти и сценични изяви за всички свои танцьори.",
           icon: "🎭",
         },
       ],
     },
+    dances: [
+      {
+        label: "Латиноамерикански танци",
+        list: ["Самба", "Ча-ча-ча", "Румба", "Пасо добле", "Джайв"],
+      },
+      {
+        label: "Стандартни танци",
+        list: ["Английски валс", "Танго", "Виенски валс", "Фокстрот", "Куикстеп"],
+      },
+    ],
     gallery: {
       title: "Галерия",
       seeAll: "Виж всички",
@@ -74,16 +84,16 @@ export const CONTENT = {
       ],
     },
     splitSection: {
-      imageTag: "Пролетен семестър",
+      imageTag: "Нови групи от 5-ти октомври",
       imageSub: "Записването е отворено",
-      titleStart: "Общност, която",
-      titleHighlight: "се движи заедно.",
-      desc: "Независимо дали тренирате за професионална кариера на сцената или просто търсите забавен начин да сте активни, вашето място е тук.",
+      titleStart: "Открийте магията на",
+      titleHighlight: "спортните танци!",
+      desc: "Запишете детето си в Клуб по спортни танци „Импулс – София“ и му подарете възможност да развие талант, увереност и любов към танца в приятелска и вдъхновяваща среда.",
       stats: [
-        { value: "250+", label: "Активни ученици", color: "text-purple-600" },
-        { value: "12", label: "Години опит", color: "text-pink-600" },
-        { value: "20+", label: "Седмични групи", color: "text-blue-600" },
-        { value: "100%", label: "Страст", color: "text-orange-500" },
+        { value: "150+", label: "Активни ученици" },
+        { value: "30+", label: "Години опит" },
+        { value: "8+", label: "Седмични групи" },
+        { value: "100%", label: "Положителни емоции" },
       ],
     },
     navbar: {
@@ -96,14 +106,14 @@ export const CONTENT = {
         { to: "/contact", label: "Контакти" },
       ],
       bookBtn: "Запази час",
+      menu: "Меню",
       subtitle: "Движение • Страст • Общност",
     },
     footer: {
-      desc: "Повече от танцово студио. Ние сме общност, посветена на движението, страстта и артистичното развитие.",
-      col1: "Студио",
+      col1: "За нас",
       col1_links: {
         story: "Нашата история",
-        classes: "Групи и Цени",
+        classes: "Групи",
         gallery: "Галерия",
         news: "Последни новини",
       },
@@ -143,14 +153,13 @@ export const CONTENT = {
       ],
     },
     cta: {
-      title: "Готови ли сте да се раздвижите?",
-      desc: "Първият урок е от нас. Запазете своя безплатен пробен час днес и вижте защо всички обичат нашият клуб.",
+      title: "Направете първата стъпка към света на танца",
+      desc: "Първият урок е безплатен, а ние ви очакваме с усмивка, за да учим, танцуваме и се забавляваме заедно в Клуб по спортни танци „Импулс – София“.",
       btn: "Запази безплатен урок",
     },
     classesPage: {
       title: "Нашите групи",
-      subtitle:
-        "Ние предлагаме разнообразие от групи — от начинаещи до напреднали и състезатели. Открийте правилното ниво за вас.",
+      subtitle: "Изберете своята танцова група.",
       labels: {
         schedule: "График:",
         btn: "Запиши се",
@@ -158,17 +167,17 @@ export const CONTENT = {
       list: [
         {
           title: "Начинаещи",
-          desc: "За деца от 5 до 13 години. Изграждаме правилна стойка, ритъм и координация. Тук създаваме първите приятелства в залата.",
+          desc: "Начинаещата група има за цел да развие чувство за ритъм, музикалност и координация, като запознае децата с основите на латиноамериканските и стандартните спортни танци.",
           schedule: ["Понеделник и Четвъртък: 18:00 - 19:00"],
         },
         {
           title: "Напреднали",
-          desc: "За тези, които искат повече. Учим сложни хореографии и работим върху самочувствието.",
+          desc: "Напредналата група има за цел да усъвършенства техниката на танцьорите и да развие уменията им чрез изучаване на по-сложни фигури и комбинации в латиноамериканските и стандартните спортни танци.",
           schedule: ["Понеделник: 19:00 - 20:00", "Сряда: 18:00 - 19:00"],
         },
         {
           title: "Състезатели",
-          desc: "Пътят към медалите! Професионални тренировки, спортни лагери и участия в турнири.",
+          desc: "Групата е насочена към професионално спортно развитие, усъвършенстване на техниката на високо ниво и целенасочена подготовка за участие в национални и международни турнири по спортни танци.",
           schedule: [
             "Сряда: 19:00 - 20:30",
             "Петък: 18:00 - 21:00",
@@ -182,6 +191,12 @@ export const CONTENT = {
       desc: "Избрани моменти от тренировки, спектакли и репетиции.",
       loading: "Зареждане на изображения...",
       defaultAlt: "Снимка от галерията",
+      viewAlbum: "Разгледай албума",
+      empty: "Все още няма албуми.",
+      noImages: "Няма снимки в този албум.",
+      close: "Затвори",
+      prev: "Предишна снимка",
+      next: "Следваща снимка",
     },
     contactPage: {
       title: "Свържете се с нас",
@@ -191,7 +206,14 @@ export const CONTENT = {
         emailPh: "Вашият Email",
         phonePh: "Вашият Телефон",
         msgPh: "Вашето Съобщение...",
+        labels: {
+          name: "Име",
+          email: "Имейл",
+          phone: "Телефон",
+          message: "Съобщение",
+        },
         btn: "Изпрати",
+        sending: "Изпращане...",
         success: "✅ Съобщението е изпратено успешно!",
         error: "❌ Възникна грешка. Моля, опитайте отново.",
         validation: {
@@ -205,6 +227,8 @@ export const CONTENT = {
         addressLabel: "Адрес:",
         addressVal: 'ж.к. Младост 2, ул. "Св. Киприян" 236, 1799, София',
         phoneLabel: "Телефон:",
+        emailLabel: "Имейл:",
+        mapTitle: "Карта с местоположението на Импулс София",
       },
     },
     newsPage: {
@@ -214,16 +238,25 @@ export const CONTENT = {
       loading: "Зареждане на новини...",
       empty: "Все още няма публикувани новини.",
       readMore: "Прочети статията",
+      back: "Назад към новини",
+      notFound: "Статията не е намерена.",
+    },
+    notFoundPage: {
+      title: "Страницата не е намерена",
+      desc: "Изглежда тази страница е излязла от залата.",
+      btn: "Обратно начало",
     },
   },
   en: {
     hero: {
-      title: "Find your rhythm. Own the stage.",
+      eyebrow: "Dancesport club · Sofia",
+      title: "Dancesport club",
+      brand: "IMPULS – SOFIA",
       subtitle:
-        "Join our welcoming community of dancers — classes for all ages and levels. From beginner technique to advanced choreography.",
+        "Together we dance, learn, grow and succeed – become part of our family.",
       btnPrimary: "Explore classes",
       btnSecondary: "View gallery",
-      newLabel: "New: Free trial class for first-timers — sign up today.",
+      newLabel: "Free first class – sign up today.",
     },
     contactPage: {
       title: "Get in touch",
@@ -233,7 +266,14 @@ export const CONTENT = {
         emailPh: "Your Email",
         phonePh: "Your Phone Number",
         msgPh: "Your Message...",
+        labels: {
+          name: "Name",
+          email: "Email",
+          phone: "Phone",
+          message: "Message",
+        },
         btn: "Send Message",
+        sending: "Sending...",
         success: "✅ Message sent successfully!",
         error: "❌ Something went wrong. Please try again.",
         validation: {
@@ -247,28 +287,40 @@ export const CONTENT = {
         addressLabel: "Address:",
         addressVal: 'g.k. Mladost 2, ul. "Sv. Kipriyan" 236, 1799, Sofia',
         phoneLabel: "Phone:",
+        emailLabel: "Email:",
+        mapTitle: "Map showing the location of Impuls Sofia",
       },
     },
     features: {
       title: "Why choose us",
       list: [
         {
-          title: "Expert instructors",
-          desc: "Professional dancers with teaching experience across styles.",
+          title: "Expert coaches",
+          desc: "Our team of experienced coaches works with dedication and professionalism to inspire children and develop their skills, confidence and love for dancesport.",
           icon: "🎓",
         },
         {
           title: "Flexible schedule",
-          desc: "Morning, evening and weekend classes for busy families.",
+          desc: "We offer group training for every level, as well as private lessons tailored to the needs and goals of each dancer.",
           icon: "⏰",
         },
         {
-          title: "Performances",
-          desc: "Showcases, competitions, and community events all year round.",
+          title: "Competitions and concerts",
+          desc: "The club takes part in national and international competitions and organises concerts and stage performances for all its dancers.",
           icon: "🎭",
         },
       ],
     },
+    dances: [
+      {
+        label: "Latin American",
+        list: ["Samba", "Cha-cha-cha", "Rumba", "Paso Doble", "Jive"],
+      },
+      {
+        label: "Standard",
+        list: ["Waltz", "Tango", "Viennese Waltz", "Foxtrot", "Quickstep"],
+      },
+    ],
     gallery: {
       title: "Gallery",
       seeAll: "See all",
@@ -284,6 +336,7 @@ export const CONTENT = {
         { to: "/contact", label: "Contact" },
       ],
       bookBtn: "Book a class",
+      menu: "Menu",
       subtitle: "Movement • Passion • Community",
     },
     galleryPage: {
@@ -291,11 +344,16 @@ export const CONTENT = {
       desc: "Selected highlights from classes, showcases, and rehearsals.",
       loading: "Loading images...",
       defaultAlt: "Gallery Image",
+      viewAlbum: "View album",
+      empty: "No albums yet.",
+      noImages: "No images in this album yet.",
+      close: "Close",
+      prev: "Previous photo",
+      next: "Next photo",
     },
     classesPage: {
       title: "Classes",
-      subtitle:
-        "We offer a wide range of classes — from beginners to advanced and competitive levels. Find the perfect fit for you.",
+      subtitle: "Choose your dance group.",
       labels: {
         schedule: "Schedule:",
         btn: "Join",
@@ -303,17 +361,17 @@ export const CONTENT = {
       list: [
         {
           title: "Beginners",
-          desc: "For kids aged 5-13. Building posture, rhythm, and coordination. Where the first dance friendships are made.",
+          desc: "The beginners group develops a sense of rhythm, musicality and coordination, introducing children to the basics of Latin American and Standard dancesport.",
           schedule: ["Monday & Thursday: 18:00 - 19:00"],
         },
         {
           title: "Advanced",
-          desc: "For those who want more. We learn complex choreographies and work on confidence.",
+          desc: "The advanced group refines the dancers' technique and builds their skills through more complex figures and combinations in Latin American and Standard dancesport.",
           schedule: ["Monday: 19:00 - 20:00", "Wednesday: 18:00 - 19:00"],
         },
         {
           title: "Competitive",
-          desc: "The road to medals! Professional training, sports camps, and tournaments.",
+          desc: "This group is focused on professional sporting development, high-level technique and targeted preparation for national and international dancesport tournaments.",
           schedule: [
             "Wednesday: 19:00 - 20:30",
             "Friday: 18:00 - 21:00",
@@ -323,11 +381,10 @@ export const CONTENT = {
       ],
     },
     footer: {
-      desc: "More than just a dance club. We are a community dedicated to movement, passion, and artistic growth.",
-      col1: "Studio",
+      col1: "About",
       col1_links: {
         story: "Our Story",
-        classes: "Classes & Pricing",
+        classes: "Classes",
         gallery: "Gallery",
         news: "Latest News",
       },
@@ -343,16 +400,16 @@ export const CONTENT = {
       madeWith: "Made with ❤️ for dancers.",
     },
     splitSection: {
-      imageTag: "Spring Term",
+      imageTag: "New groups from 5 October",
       imageSub: "Enrollment Open Now",
-      titleStart: "A community that",
-      titleHighlight: "moves together.",
-      desc: "Whether you're training for a career on stage or just looking for a fun way to stay active, you belong here.",
+      titleStart: "Discover the magic of",
+      titleHighlight: "dancesport!",
+      desc: "Enrol your child at Dancesport Club “Impuls – Sofia” and give them the chance to develop talent, confidence and a love of dance in a friendly, inspiring environment.",
       stats: [
-        { value: "250+", label: "Active Students", color: "text-purple-600" },
-        { value: "12", label: "Years Experience", color: "text-pink-600" },
-        { value: "20+", label: "Weekly Classes", color: "text-blue-600" },
-        { value: "100%", label: "Passion", color: "text-orange-500" },
+        { value: "150+", label: "Active Students" },
+        { value: "30+", label: "Years Experience" },
+        { value: "8+", label: "Weekly Classes" },
+        { value: "100%", label: "Positive Emotions" },
       ],
     },
     testimonials: {
@@ -380,8 +437,8 @@ export const CONTENT = {
       ],
     },
     cta: {
-      title: "Ready to start moving?",
-      desc: "Your first class is on us. Book your free trial today and come see why everyone loves our club.",
+      title: "Take the first step into the world of dance",
+      desc: "The first class is free, and we'll be waiting with a smile to learn, dance and have fun together at Dancesport Club “Impuls – Sofia”.",
       btn: "Book Free Trial",
     },
     about: {
@@ -427,6 +484,13 @@ Behind the successes of all dance couples and solo ladies stand countless hours 
       loading: "Loading news...",
       empty: "No news published yet.",
       readMore: "Read article",
+      back: "Back to news",
+      notFound: "Article not found.",
+    },
+    notFoundPage: {
+      title: "Page not found",
+      desc: "Looks like this page stepped off the stage.",
+      btn: "Back to home",
     },
   },
 };

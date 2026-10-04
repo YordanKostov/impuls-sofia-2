@@ -2,117 +2,127 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Link } from "react-router-dom";
 import Container from "../components/Container";
+import PageHeader from "../components/PageHeader";
 import { useLanguage } from "../context/LanguageContext";
+import usePageTitle from "../hooks/usePageTitle";
 import { motion } from "framer-motion";
 
 export default function News() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 2. Get translations
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const content = t.newsPage;
+  usePageTitle(content.title);
 
   useEffect(() => {
-    supabase
-      .from("articles")
-      // If you later add 'title_bg', add it to this select string
-      .select("title, excerpt, slug, cover_image, published_at")
-      .order("published_at", { ascending: false })
-      .then(({ data }) => {
-        setArticles(data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error loading news:", error);
-        setLoading(false);
-      });
+    let ignore = false;
+
+    async function fetchArticles() {
+      const { data, error } = await supabase
+        .from("articles")
+        .select("title, excerpt, slug, cover_image, published_at")
+        .order("published_at", { ascending: false });
+
+      if (ignore) return;
+      if (error) console.error("Error loading news:", error);
+      setArticles(data || []);
+      setLoading(false);
+    }
+
+    fetchArticles();
+    return () => {
+      ignore = true;
+    };
   }, []);
 
+  const formatDate = (value) =>
+    value
+      ? new Date(value).toLocaleDateString(lang === "bg" ? "bg-BG" : "en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
+      : "";
+
   return (
-    <main className="py-20 min-h-screen">
+    <section className="py-12 md:py-20">
       <Container>
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-2xl mb-12"
-        >
-          <h1 className="text-4xl font-extrabold text-gray-900">
-            {content.title}
-          </h1>
-          <p className="mt-3 text-gray-600 text-lg">{content.subtitle}</p>
-        </motion.div>
+        <PageHeader
+          eyebrow="Impuls Sofia"
+          title={content.title}
+          subtitle={content.subtitle}
+        />
 
         {loading ? (
-          <div className="text-gray-500 py-10">{content.loading}</div>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3" aria-busy="true">
+            {[...Array(3)].map((_, i) => (
+              <div key={i}>
+                <div className="skeleton aspect-[4/3]" />
+                <div className="skeleton mt-5 h-3 w-1/3" />
+                <div className="skeleton mt-3 h-7 w-4/5" />
+                <div className="skeleton mt-3 h-4 w-full" />
+              </div>
+            ))}
+          </div>
+        ) : articles.length === 0 ? (
+          <p className="font-display text-2xl italic text-ink-500">
+            {content.empty}
+          </p>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
             {articles.map((a, i) => (
-              <motion.div
+              <motion.article
                 key={a.slug}
                 initial={{ y: 24, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.45 }}
+                transition={{ delay: (i % 3) * 0.08, duration: 0.45 }}
               >
-              <Link
-                to={`/news/${a.slug}`}
-                className="group block h-full"
-              >
-                <article className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
-                  <div className="h-56 overflow-hidden relative">
-                    {/* Image Fallback if no cover image exists */}
+                <Link to={`/news/${a.slug}`} className="group block">
+                  <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-mint-100 shadow-soft">
                     {a.cover_image ? (
                       <img
                         src={a.cover_image}
-                        alt={a.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        alt=""
+                        loading={i < 3 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                        No Image
+                      <div className="flex h-full w-full items-center justify-center font-display text-6xl italic text-ink-700/30">
+                        IS
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                   </div>
 
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h2 className="text-xl font-bold text-gray-900 group-hover:text-rose-600 transition-colors line-clamp-2">
-                      {a.title}
-                    </h2>
-                    <p className="mt-3 text-gray-600 line-clamp-3 text-sm leading-relaxed flex-grow">
-                      {a.excerpt}
-                    </p>
-
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex items-center text-rose-600 font-semibold text-sm">
-                      {content.readMore}
-                      <svg
-                        className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </article>
-              </Link>
-              </motion.div>
+                  <time
+                    dateTime={a.published_at}
+                    className="mt-5 block text-xs font-bold uppercase tracking-[0.18em] text-mint-600"
+                  >
+                    {formatDate(a.published_at)}
+                  </time>
+                  <h2 className="mt-2 line-clamp-2 font-display text-3xl font-semibold leading-tight text-ink transition-colors group-hover:text-ink-700">
+                    {a.title}
+                  </h2>
+                  <p className="mt-2 line-clamp-3 leading-relaxed text-ink-500">
+                    {a.excerpt}
+                  </p>
+                  <span className="link-arrow mt-4">
+                    {content.readMore}
+                    <span
+                      className="transition-transform group-hover:translate-x-1"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                  </span>
+                </Link>
+              </motion.article>
             ))}
           </div>
         )}
-
-        {!loading && articles.length === 0 && (
-          <div className="text-gray-500 italic">{content.empty}</div>
-        )}
       </Container>
-    </main>
+    </section>
   );
 }

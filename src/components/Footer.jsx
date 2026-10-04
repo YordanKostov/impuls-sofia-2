@@ -1,164 +1,117 @@
 import { Link } from "react-router-dom";
 import Container from "./Container.jsx";
-import instagram_logo from "../assets/instagram_logo.png";
-import facebook_logo from "../assets/facebook_logo.png";
 import logo from "../assets/logo.png";
-// 1. Import hook
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { SITE, telHref } from "../lib/site.js";
+
+const linkClass =
+  "inline-block text-ink-100/80 transition-all hover:translate-x-1 hover:text-mint";
+
+function SocialLink({ href, label, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white transition-all hover:-translate-y-0.5 hover:border-mint hover:bg-mint hover:text-ink-950"
+    >
+      <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        {children}
+      </svg>
+    </a>
+  );
+}
 
 export default function Footer() {
-  // 2. Get content
   const { t } = useLanguage();
-  const footer = t.footer; // Short helper variable
+  const footer = t.footer;
 
   return (
-    <footer className="pb-6 pt-0">
+    <footer className="mt-24 bg-ink-950 text-white">
       <Container>
-        <div className="bg-white/40 backdrop-blur-md border border-white/50 rounded-[2rem] p-6 md:p-8 shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 mb-6">
-            {/* Column 1: Brand */}
-            <div className="md:col-span-1">
-              <Link to="/" className="flex items-center gap-2 mb-3 group">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-white shadow-sm group-hover:scale-105 transition-transform">
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="font-bold text-lg text-gray-900">
-                  Impuls Sofia
-                </span>
-              </Link>
-              <p className="text-gray-700 text-xs leading-relaxed mb-4 font-medium max-w-xs">
-                {footer.desc}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 md:grid-cols-12">
+          {/* Column 1: Brand */}
+          <div className="col-span-2 md:col-span-5">
+            <Link to="/" className="mb-5 flex items-center gap-3">
+              <img
+                src={logo}
+                alt=""
+                width="44"
+                height="44"
+                loading="lazy"
+                className="h-11 w-11 rounded-full object-cover"
+              />
+              <span className="font-display text-3xl font-semibold">
+                Impuls Sofia
+              </span>
+            </Link>
+            <div className="flex gap-3">
+              <SocialLink href={SITE.facebook} label="Facebook">
+                <path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.200-.1-2.200-.1-2.200 0-3.700 1.300-3.700 3.800v2.400H8v3h2.600V21h2.900z" />
+              </SocialLink>
+              <SocialLink href={SITE.instagram} label="Instagram">
+                <path d="M12 7.300a4.700 4.700 0 100 9.400 4.700 4.700 0 000-9.400zm0 7.700a3 3 0 110-6 3 3 0 010 6zm4.900-8.900a1.100 1.100 0 100 2.200 1.100 1.100 0 000-2.200zM16.400 3H7.600A4.600 4.600 0 003 7.600v8.800A4.600 4.600 0 007.600 21h8.800a4.600 4.600 0 004.600-4.600V7.600A4.600 4.600 0 0016.400 3zm2.900 13.400a2.900 2.900 0 01-2.900 2.900H7.600a2.900 2.900 0 01-2.900-2.900V7.600a2.900 2.900 0 012.900-2.900h8.800a2.900 2.900 0 012.900 2.900v8.800z" />
+              </SocialLink>
+            </div>
+          </div>
+
+          {/* Column 2: Studio */}
+          <div className="md:col-span-3">
+            <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-mint">
+              {footer.col1}
+            </h3>
+            <ul className="space-y-2.5">
+              <li>
+                <Link to="/about" className={linkClass}>
+                  {footer.col1_links.story}
+                </Link>
+              </li>
+              <li>
+                <Link to="/classes" className={linkClass}>
+                  {footer.col1_links.classes}
+                </Link>
+              </li>
+              <li>
+                <Link to="/gallery" className={linkClass}>
+                  {footer.col1_links.gallery}
+                </Link>
+              </li>
+              <li>
+                <Link to="/news" className={linkClass}>
+                  {footer.col1_links.news}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Visit */}
+          <div className="md:col-span-4">
+            <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-mint">
+              {footer.col3}
+            </h3>
+            <address className="space-y-2.5 not-italic text-ink-100/80">
+              <p>{footer.address}</p>
+              <p>
+                <a href={`mailto:${SITE.email}`} className="transition-colors hover:text-mint">
+                  {SITE.email}
+                </a>
               </p>
-              <div className="flex gap-3">
-                <a
-                  href="https://www.facebook.com/ImpulsSofiq"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="opacity-80 hover:opacity-100 hover:scale-110 transition-all"
-                >
-                  <img src={facebook_logo} alt="Facebook" className="w-6 h-6" />
+              <p>
+                <a href={telHref} className="transition-colors hover:text-mint">
+                  {SITE.phone}
                 </a>
-                <a
-                  href="https://www.instagram.com/impuls_sofia"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="opacity-80 hover:opacity-100 hover:scale-110 transition-all"
-                >
-                  <img
-                    src={instagram_logo}
-                    alt="Instagram"
-                    className="w-6 h-6"
-                  />
-                </a>
-              </div>
-            </div>
-
-            {/* Column 2: Studio */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">
-                {footer.col1}
-              </h3>
-              <ul className="space-y-1.5 text-xs text-gray-600 font-medium">
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
-                  >
-                    {footer.col1_links.story}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/classes"
-                    className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
-                  >
-                    {footer.col1_links.classes}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/gallery"
-                    className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
-                  >
-                    {footer.col1_links.gallery}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/news"
-                    className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
-                  >
-                    {footer.col1_links.news}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 3: Support */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">
-                {footer.col2}
-              </h3>
-              <ul className="space-y-1.5 text-xs text-gray-600 font-medium">
-                <li>
-                  <Link
-                    to="/contact"
-                    className="hover:text-gray-900 hover:translate-x-1 inline-block transition-all"
-                  >
-                    {footer.col2_links.contact}
-                  </Link>
-                </li>
-                <li>
-                  <span className="cursor-not-allowed opacity-50">
-                    {footer.col2_links.privacy}
-                  </span>
-                </li>
-                <li>
-                  <span className="cursor-not-allowed opacity-50">
-                    {footer.col2_links.terms}
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4: Visit */}
-            <div>
-              <h3 className="font-bold text-gray-900 text-sm mb-3">
-                {footer.col3}
-              </h3>
-              <address className="not-italic text-xs text-gray-600 font-medium space-y-1.5">
-                <p>{footer.address}</p>
-                <p>
-                  <a
-                    href="mailto:info@impuls-sofia.com"
-                    className="hover:text-gray-900 hover:underline transition-all"
-                  >
-                    info@impuls-sofia.com
-                  </a>
-                </p>
-                <p>
-                  <a
-                    href="tel:+359888123456"
-                    className="hover:text-gray-900 hover:underline transition-all"
-                  >
-                    +359 888 123 456
-                  </a>
-                </p>
-              </address>
-            </div>
+              </p>
+            </address>
           </div>
+        </div>
 
-          {/* Bottom Bar */}
-          <div className="pt-4 border-t border-gray-200/50 flex flex-col md:flex-row justify-between items-center gap-2 text-[10px] md:text-xs text-gray-500 font-medium">
-            <div>
-              © {new Date().getFullYear()} Impuls Sofia. {footer.rights}
-            </div>
-            <div>{footer.madeWith}</div>
+        {/* Bottom Bar */}
+        <div className="flex flex-col items-center justify-between gap-2 border-t border-white/10 py-6 text-sm text-ink-100/50 md:flex-row">
+          <div>
+            © {new Date().getFullYear()} Impuls Sofia. {footer.rights}
           </div>
+          <div>{footer.madeWith}</div>
         </div>
       </Container>
     </footer>

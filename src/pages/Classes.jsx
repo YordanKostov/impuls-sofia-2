@@ -1,94 +1,103 @@
 import { Link } from "react-router-dom";
 import Container from "../components/Container";
+import PageHeader from "../components/PageHeader";
 import { motion } from "framer-motion";
 import { useLanguage } from "../context/LanguageContext";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Classes() {
   const { t } = useLanguage();
   const content = t.classesPage;
-
-  const tierStripes = ["bg-emerald-400", "bg-amber-400", "bg-rose-500"];
+  usePageTitle(content.title);
 
   return (
-    <main className="py-20">
+    <section className="py-12 md:py-20">
       <Container>
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl font-extrabold text-gray-900">
-            {content.title}
-          </h2>
-          <p className="mt-3 text-gray-600 max-w-2xl text-lg">
-            {content.subtitle}
-          </p>
-        </motion.div>
+        <PageHeader
+          eyebrow={t.hero.eyebrow}
+          title={content.title}
+          subtitle={content.subtitle}
+        />
 
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {content.list.map((c, i) => (
-            <motion.div
-              key={i}
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.12, duration: 0.5 }}
-              whileHover={{ y: -6 }}
-              className="pt-8 px-6 pb-6 rounded-2xl border border-gray-100 bg-white shadow-lg hover:shadow-xl transition-all flex flex-col h-full overflow-hidden relative"
-            >
-              {/* Tier accent stripe */}
-              <div className={`absolute top-0 left-0 right-0 h-1.5 ${tierStripes[i]}`} />
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {content.list.map((c, i) => {
+            // The top tier is the highlighted card
+            const featured = i === content.list.length - 1;
 
-              {/* Header */}
-              <div className="mb-4">
-                <div className="font-bold text-xl text-gray-900">{c.title}</div>
-              </div>
+            return (
+              <motion.div
+                key={i}
+                initial={{ y: 30, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                className={`flex h-full flex-col rounded-3xl p-7 transition-shadow duration-300 hover:shadow-lift md:p-8 ${
+                  featured
+                    ? "bg-ink text-white shadow-lift"
+                    : "card"
+                }`}
+              >
+                <div
+                  className={`font-display text-5xl font-medium italic ${
+                    featured ? "text-mint" : "text-mint-600"
+                  }`}
+                >
+                  0{i + 1}
+                </div>
+                <h2
+                  className={`mt-5 font-display text-4xl font-semibold ${
+                    featured ? "text-white" : "text-ink"
+                  }`}
+                >
+                  {c.title}
+                </h2>
 
-              {/* Description (Age is now included here) */}
-              <p className="text-gray-600 leading-relaxed text-sm mb-6 flex-grow">
-                {c.desc}
-              </p>
+                <p
+                  className={`mt-3 flex-grow leading-relaxed ${
+                    featured ? "text-ink-100/80" : "text-ink-500"
+                  }`}
+                >
+                  {c.desc}
+                </p>
 
-              {/* Schedule Section */}
-              <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
-                <div className="flex items-center gap-2 mb-2 text-gray-900 font-semibold text-sm">
-                  <svg
-                    className="w-4 h-4 text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                {/* Schedule Section */}
+                <div
+                  className={`mt-7 border-t pt-5 ${
+                    featured ? "border-white/15" : "border-ink/10"
+                  }`}
+                >
+                  <div
+                    className={`mb-3 text-xs font-bold uppercase tracking-[0.2em] ${
+                      featured ? "text-mint" : "text-ink-700"
+                    }`}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  {content.labels.schedule}
+                    {content.labels.schedule}
+                  </div>
+                  <ul className="space-y-1.5">
+                    {c.schedule.map((time, idx) => (
+                      <li
+                        key={idx}
+                        className={`text-[0.95rem] font-medium tabular-nums ${
+                          featured ? "text-white" : "text-ink-900"
+                        }`}
+                      >
+                        {time}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                <div className="space-y-1">
-                  {c.schedule.map((time, idx) => (
-                    <div key={idx} className="text-sm text-gray-600">
-                      {time}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Button */}
-              <div className="mt-auto">
                 <Link
                   to="/contact"
-                  className="block w-full text-center px-5 py-3 rounded-full bg-gray-900 text-white text-sm font-bold hover:bg-gray-800 transition-colors"
+                  className={`mt-8 w-full ${featured ? "btn-light" : "btn-primary"}`}
                 >
                   {content.labels.btn}
                 </Link>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </Container>
-    </main>
+    </section>
   );
 }

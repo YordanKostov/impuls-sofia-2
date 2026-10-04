@@ -1,8 +1,33 @@
 import { useState } from "react";
 import Container from "../components/Container";
+import PageHeader from "../components/PageHeader";
 import { useForm } from "react-hook-form";
 import { useLanguage } from "../context/LanguageContext";
+import usePageTitle from "../hooks/usePageTitle";
+import { SITE, telHref } from "../lib/site";
 import { motion } from "framer-motion";
+
+const MAP_SRC =
+  "https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=%D0%A3%D0%BB.%20%D0%A1%D0%B2%D0%B5%D1%82%D0%B8%20%D0%9A%D0%B8%D0%BF%D1%80%D0%B8%D1%8F%D0%BD%20236%201799%20Sofia%2C%20Bulgaria&maptype=roadmap";
+
+function Field({ id, label, error, children }) {
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-ink-700"
+      >
+        {label}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-error`} role="alert" className="ml-1 mt-1.5 text-sm text-red-600">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function Contact() {
   const {
@@ -17,10 +42,22 @@ export default function Contact() {
 
   const { t } = useLanguage();
   const content = t.contactPage;
+  const form = content.form;
   // Shortcut to validation messages
-  const errorMsg = content.form.validation;
+  const errorMsg = form.validation;
+  usePageTitle(content.title);
+
+  const fieldProps = (name) => ({
+    id: name,
+    className: `field ${errors[name] ? "field-error" : ""}`,
+    "aria-invalid": errors[name] ? "true" : undefined,
+    "aria-describedby": errors[name] ? `${name}-error` : undefined,
+  });
 
   const onSubmit = async (data) => {
+    // Honeypot: real visitors never fill this in
+    if (data.botcheck) return;
+
     setIsSubmitting(true);
     setFormStatus(null);
 
@@ -32,7 +69,7 @@ export default function Contact() {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "f7271db1-1833-4958-ad13-ae3d33835390",
+          access_key: import.meta.env.VITE_WEB3_ACCESS_KEY,
           name: data.name,
           email: data.email,
           phone: data.phone,
@@ -48,7 +85,7 @@ export default function Contact() {
       } else {
         setFormStatus("error");
       }
-    } catch (error) {
+    } catch {
       setFormStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -56,168 +93,155 @@ export default function Contact() {
   };
 
   return (
-    <main className="py-20 min-h-screen">
+    <section className="py-12 md:py-20">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+        <PageHeader
+          eyebrow="Impuls Sofia"
+          title={content.title}
+          subtitle={content.desc}
+        />
+
+        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-12">
           {/* LEFT COLUMN: Form */}
           <motion.div
-            initial={{ x: -30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.55 }}
-            className="flex flex-col h-full justify-center"
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            className="card p-6 md:p-9"
           >
-            <h2 className="text-3xl font-extrabold text-gray-900">
-              {content.title}
-            </h2>
-            <p className="mt-3 text-gray-600 text-lg leading-relaxed">
-              {content.desc}
-            </p>
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+              <input
+                type="checkbox"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+                {...register("botcheck")}
+              />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
-              {/* Name */}
-              <div>
+              <Field id="name" label={form.labels.name} error={errors.name && errorMsg.name}>
                 <input
                   {...register("name", { required: true })}
-                  placeholder={content.form.namePh}
-                  className={`w-full p-4 rounded-xl border outline-none transition-all ${
-                    errors.name
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500"
-                  }`}
+                  {...fieldProps("name")}
+                  placeholder={form.namePh}
+                  autoComplete="name"
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-sm mt-1 ml-2">
-                    {errorMsg.name}
-                  </p>
-                )}
+              </Field>
+
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <Field id="email" label={form.labels.email} error={errors.email && errorMsg.email}>
+                  <input
+                    {...register("email", {
+                      required: true,
+                      pattern: /^\S+@\S+\.\S+$/,
+                    })}
+                    {...fieldProps("email")}
+                    placeholder={form.emailPh}
+                    type="email"
+                    autoComplete="email"
+                  />
+                </Field>
+
+                <Field id="phone" label={form.labels.phone} error={errors.phone && errorMsg.phone}>
+                  <input
+                    {...register("phone", {
+                      required: true,
+                      minLength: 6,
+                      pattern: /^[0-9+\s-]+$/,
+                    })}
+                    {...fieldProps("phone")}
+                    placeholder={form.phonePh}
+                    type="tel"
+                    autoComplete="tel"
+                  />
+                </Field>
               </div>
 
-              {/* Email */}
-              <div>
-                <input
-                  {...register("email", {
-                    required: true,
-                    pattern: /^\S+@\S+$/i,
-                  })}
-                  placeholder={content.form.emailPh}
-                  type="email"
-                  className={`w-full p-4 rounded-xl border outline-none transition-all ${
-                    errors.email
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500"
-                  }`}
-                />
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1 ml-2">
-                    {errorMsg.email}
-                  </p>
-                )}
-              </div>
-
-              {/* Phone */}
-              <div>
-                <input
-                  {...register("phone", {
-                    required: true,
-                    minLength: 6,
-                    pattern: /^[0-9+\s-]+$/,
-                  })}
-                  placeholder={content.form.phonePh}
-                  type="tel"
-                  className={`w-full p-4 rounded-xl border outline-none transition-all ${
-                    errors.phone
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500"
-                  }`}
-                />
-                {errors.phone && (
-                  <p className="text-red-500 text-sm mt-1 ml-2">
-                    {errorMsg.phone}
-                  </p>
-                )}
-              </div>
-
-              {/* Message */}
-              <div>
+              <Field id="message" label={form.labels.message} error={errors.message && errorMsg.message}>
                 <textarea
                   {...register("message", { required: true })}
-                  placeholder={content.form.msgPh}
+                  {...fieldProps("message")}
+                  placeholder={form.msgPh}
                   rows={5}
-                  className={`w-full p-4 rounded-xl border outline-none transition-all resize-none ${
-                    errors.message
-                      ? "border-red-500 bg-red-50"
-                      : "border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-pink-500"
-                  }`}
-                ></textarea>
-                {errors.message && (
-                  <p className="text-red-500 text-sm mt-1 ml-2">
-                    {errorMsg.message}
-                  </p>
-                )}
-              </div>
+                  style={{ resize: "none" }}
+                />
+              </Field>
 
-              {/* Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-8 py-4 rounded-full font-bold shadow-lg transition-all ${
-                  isSubmitting
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-rose-600 text-white hover:bg-rose-700 hover:-translate-y-1"
-                }`}
+                className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-                {isSubmitting ? "..." : content.form.btn}
+                {isSubmitting ? form.sending : form.btn}
               </button>
 
               {/* Status Messages */}
-              {formStatus === "success" && (
-                <div className="p-4 bg-green-50 text-green-700 rounded-lg border border-green-200">
-                  {content.form.success}
-                </div>
-              )}
-              {formStatus === "error" && (
-                <div className="p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
-                  {content.form.error}
-                </div>
-              )}
+              <div aria-live="polite">
+                {formStatus === "success" && (
+                  <div className="rounded-2xl border border-mint-200 bg-mint-50 p-4 font-medium text-ink">
+                    {form.success}
+                  </div>
+                )}
+                {formStatus === "error" && (
+                  <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-medium text-red-700">
+                    {form.error}
+                  </div>
+                )}
+              </div>
             </form>
-
-            <div className="mt-10 pt-8 border-t border-gray-100 text-gray-600">
-              <div className="flex gap-2 mb-2">
-                <strong className="text-gray-900">
-                  {content.info.addressLabel}
-                </strong>
-                <span>{content.info.addressVal}</span>
-              </div>
-              <div className="flex gap-2">
-                <strong className="text-gray-900">
-                  {content.info.phoneLabel}
-                </strong>
-                <span>+359 888 123 456</span>
-              </div>
-            </div>
           </motion.div>
 
-          {/* RIGHT COLUMN: Map */}
+          {/* RIGHT COLUMN: Details + Map */}
           <motion.div
-            initial={{ x: 30, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="relative h-full min-h-[450px] w-full"
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.55, delay: 0.2 }}
+            className="flex flex-col gap-6"
           >
-            <div className="absolute inset-0 rounded-[2rem] overflow-hidden shadow-2xl border border-gray-100 bg-gray-100">
+            <dl className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <dt className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
+                  {content.info.addressLabel}
+                </dt>
+                <dd className="mt-1 font-display text-2xl font-semibold leading-snug text-ink">
+                  {content.info.addressVal}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
+                  {content.info.phoneLabel}
+                </dt>
+                <dd className="mt-1 font-display text-2xl font-semibold text-ink">
+                  <a href={telHref} className="hover:text-ink-700">
+                    {SITE.phone}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
+                  {content.info.emailLabel}
+                </dt>
+                <dd className="mt-1 break-words font-display text-2xl font-semibold text-ink">
+                  <a href={`mailto:${SITE.email}`} className="hover:text-ink-700">
+                    {SITE.email}
+                  </a>
+                </dd>
+              </div>
+            </dl>
+
+            <div className="relative min-h-[340px] flex-1 overflow-hidden rounded-[2rem] border border-ink/10 bg-ink-100 shadow-soft">
               <iframe
-                title="Impuls Location"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=%D0%A3%D0%BB.%20%D0%A1%D0%B2%D0%B5%D1%82%D0%B8%20%D0%9A%D0%B8%D0%BF%D1%80%D0%B8%D1%8F%D0%BD%20236%201799%20Sofia%2C%20Bulgaria&maptype=roadmap"
-                className="w-full h-full border-0"
+                title={content.info.mapTitle}
+                src={MAP_SRC}
+                className="absolute inset-0 h-full w-full border-0"
                 loading="lazy"
-                allowFullScreen=""
+                allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
           </motion.div>
         </div>
       </Container>
-    </main>
+    </section>
   );
 }

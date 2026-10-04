@@ -1,67 +1,72 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { useEffect, useRef, useState } from "react";
 
-// 1. Accept props: 'externalImages' (optional) and 'className' (for custom height)
-export default function ImageCarousel({ externalImages, className }) {
-  const [fetchedImages, setFetchedImages] = useState([]);
+const INTERVAL_MS = 4500;
+const SWIPE_THRESHOLD = 40;
+
+// `images` is a list of URL strings or { image_url, alt } objects
+export default function ImageCarousel({ images = [], className = "", priority = false }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const touchStartX = useRef(null);
+  const count = images.length;
 
-  // Determine which images to use
-  const images = externalImages || fetchedImages;
-
-  // 2. Fetch Data (ONLY if no external images are provided)
+  // Keep the index valid if the image list changes
   useEffect(() => {
-    if (externalImages) return; // Skip fetching if we already have images
+    setCurrentIndex(0);
+  }, [count]);
 
-    supabase
-      .from("gallery_images")
-      .select("*")
-      .eq("featured", true)
-      .order("order_index")
-      .then(({ data }) => {
-        if (data) setFetchedImages(data);
-      });
-  }, [externalImages]);
-
-  // 3. Automatic Timer
+  // Automatic Timer
   useEffect(() => {
-    if (!images || images.length <= 1) return;
+    if (count <= 1 || paused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 3500);
+      if (document.hidden) return;
+      setCurrentIndex((prev) => (prev + 1) % count);
+    }, INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, [images]);
+  }, [count, paused]);
 
-  if (!images || !images.length) return null;
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null || count <= 1) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < SWIPE_THRESHOLD) return;
+    setCurrentIndex((prev) => (prev + (delta < 0 ? 1 : -1) + count) % count);
+  };
+
+  // Reserve the space while images load so the layout doesn't jump
+  if (!count) {
+    return <div className={`skeleton w-full ${className}`} aria-hidden="true" />;
+  }
 
   return (
-    // Allow custom className for height, default to h-[520px] if not provided
     <div
-      className={`rounded-3xl overflow-hidden relative w-full group ${
-        className || "h-[520px]"
-      }`}
+      className={`group relative w-full overflow-hidden bg-ink-100 ${className}`}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={(e) => (touchStartX.current = e.touches[0].clientX)}
+      onTouchEnd={onTouchEnd}
     >
       <div
-        className="flex h-full transition-transform duration-700 ease-in-out will-change-transform"
+        className="flex h-full transition-transform duration-1000 ease-[cubic-bezier(0.65,0,0.35,1)] will-change-transform"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {images.map((image, index) => {
-          // HANDLE DATA DIFFERENCE:
-          // If 'image' is a string (from News), use it directly.
-          // If 'image' is an object (from DB), use .image_url
           const src = typeof image === "string" ? image : image.image_url;
-          const alt = typeof image === "string" ? `Slide ${index}` : image.alt;
+          const alt = typeof image === "string" ? "" : image.alt || "";
+          const eager = priority && index === 0;
 
           return (
-            <div key={index} className="min-w-full h-full relative">
+            <div key={src} className="h-full min-w-full">
               <img
                 src={src}
                 alt={alt}
-                className="w-full h-full object-cover select-none"
+                loading={eager ? "eager" : "lazy"}
+                fetchPriority={eager ? "high" : "auto"}
+                decoding="async"
+                className="h-full w-full select-none object-cover"
                 draggable="false"
               />
             </div>
@@ -70,18 +75,20 @@ export default function ImageCarousel({ externalImages, className }) {
       </div>
 
       {/* Indicators */}
-      {images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+      {count > 1 && (
+        <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 rounded-full bg-ink-950/35 px-2.5 py-2 backdrop-blur-sm">
           {images.map((_, idx) => (
             <button
               key={idx}
+              type="button"
               onClick={() => setCurrentIndex(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 rounded-full transition-all duration-300 ${
                 idx === currentIndex
                   ? "w-6 bg-white"
-                  : "w-2 bg-white/50 hover:bg-white/80"
+                  : "w-1.5 bg-white/55 hover:bg-white/90"
               }`}
-              aria-label={`Go to slide ${idx + 1}`}
+              aria-label={`${idx + 1} / ${count}`}
+              aria-current={idx === currentIndex}
             />
           ))}
         </div>

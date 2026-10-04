@@ -1,46 +1,49 @@
 import Container from "./Container.jsx";
 import { Link, NavLink } from "react-router-dom";
 import MobileMenu from "./MobileMenu.jsx";
+import LanguageSwitch from "./LanguageSwitch.jsx";
 import logo from "../assets/logo.png";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Navbar() {
-  const { t, lang, setLang } = useLanguage();
+  const { t } = useLanguage();
   const nav = t.navbar.links;
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-gray-100">
+    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/80 backdrop-blur-md">
       <Container>
-        <nav className="flex items-center justify-between h-20">
+        <nav className="relative flex h-20 items-center justify-between">
           {/* Logo Section */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-white shadow-sm group-hover:shadow-md transition-shadow">
-              <img
-                src={logo}
-                alt="Dance Studio logo"
-                className="w-full h-full object-cover"
-              />
-            </div>
+          <Link to="/" className="group flex items-center gap-3">
+            <img
+              src={logo}
+              alt=""
+              width="48"
+              height="48"
+              className="h-12 w-12 rounded-full object-cover shadow-soft transition-transform duration-500 group-hover:rotate-6"
+            />
             <div>
-              <div className="font-bold text-gray-900">Impuls Sofia</div>
-              <div className="text-xs text-gray-500 -mt-0.5 tracking-wide">
+              <div className="font-display text-2xl font-semibold leading-none text-ink">
+                Impuls Sofia
+              </div>
+              <div className="mt-1 hidden whitespace-nowrap text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-ink-500 sm:block lg:hidden xl:block">
                 {t.navbar.subtitle}
               </div>
             </div>
           </Link>
 
           {/* Desktop Menu (Hidden on Mobile) */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden items-center gap-5 lg:flex xl:gap-7">
             {nav.map((n) => (
               <NavLink
                 key={n.to}
                 to={n.to}
                 end={n.to === "/"}
                 className={({ isActive }) =>
-                  `text-sm font-medium transition-colors ${
+                  `relative whitespace-nowrap py-2 text-[0.95rem] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:rounded-full after:bg-mint-600 after:transition-transform after:duration-300 ${
                     isActive
-                      ? "text-pink-600 font-semibold"
-                      : "text-gray-500 hover:text-gray-900"
+                      ? "text-ink after:scale-x-100"
+                      : "text-ink-500 after:scale-x-0 hover:text-ink hover:after:scale-x-100"
                   }`
                 }
               >
@@ -48,40 +51,14 @@ export default function Navbar() {
               </NavLink>
             ))}
 
-            {/* Desktop Language Switcher */}
-            <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-full mx-2">
-              <button
-                onClick={() => setLang("bg")}
-                className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                  lang === "bg"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                BG
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                  lang === "en"
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                EN
-              </button>
-            </div>
+            <LanguageSwitch />
 
-            <Link
-              to="/contact"
-              className="inline-block px-6 py-2.5 rounded-full bg-gray-900 text-white text-sm font-semibold shadow-md hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-            >
+            <Link to="/contact" className="btn-primary whitespace-nowrap px-6 py-2.5 text-sm">
               {t.navbar.bookBtn}
             </Link>
           </div>
 
-          {/* Mobile Menu - Passing down the props */}
-          <MobileMenu nav={nav} lang={lang} setLang={setLang} t={t} />
+          <MobileMenu nav={nav} t={t} />
         </nav>
       </Container>
     </header>
