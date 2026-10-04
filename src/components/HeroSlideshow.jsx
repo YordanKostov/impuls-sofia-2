@@ -5,74 +5,86 @@ const INTERVAL_MS = 6000;
 
 // Portrait photo slideshow with a soft glow taken from the current photo.
 // `slides` are { src, caption }.
+//
+// Every photo (and its blurred glow) stays mounted once it has been reached and
+// is only revealed after it has fully loaded, so nothing half-decoded or
+// freshly blurred ever flashes on screen. The next photo is preloaded.
 export default function HeroSlideshow({ slides, className = "" }) {
   const [index, setIndex] = useState(0);
+  const [furthest, setFurthest] = useState(0);
+  const [loaded, setLoaded] = useState(() => new Set());
   const count = slides.length;
 
   useEffect(() => {
     setIndex(0);
+    setFurthest(0);
   }, [count]);
 
   useEffect(() => {
-    if (count <= 1) return;
+    setFurthest((f) => Math.max(f, index));
+  }, [index]);
+
+  const current = slides[index];
+  const currentReady = current && loaded.has(current.src);
+
+  // Advance only once the current photo is on screen
+  useEffect(() => {
+    if (count <= 1 || !currentReady) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const timer = setTimeout(() => {
       if (!document.hidden) setIndex((i) => (i + 1) % count);
     }, INTERVAL_MS);
     return () => clearTimeout(timer);
-  }, [index, count]);
+  }, [index, count, currentReady]);
 
-  const current = slides[index];
+  const markLoaded = (src) =>
+    setLoaded((prev) => (prev.has(src) ? prev : new Set(prev).add(src)));
+
+  // Photos reached so far plus the next one (preload)
+  const mounted = slides.slice(0, Math.min(count, furthest + 2));
+
+  const isShown = (slide, i) => i === index && loaded.has(slide.src);
 
   return (
     <div className={`relative isolate ${className}`}>
-      {/* Glow: blurred copies of every photo stay mounted and simply crossfade,
-          so switching never re-blurs (and flashes) a freshly loaded image */}
+      {/* Glow: blurred copies of the photos, crossfading */}
       <div className="pointer-events-none absolute inset-2 z-0" aria-hidden="true">
-        {slides.map((slide, i) => (
+        {mounted.map((slide, i) => (
           <img
             key={slide.src}
             src={slide.src}
             alt=""
             decoding="async"
             className={`absolute inset-0 h-full w-full translate-y-8 scale-105 object-cover blur-[48px] saturate-150 transition-opacity duration-[1200ms] ease-out ${
-              i === index ? "opacity-90" : "opacity-0"
+              isShown(slide, i) ? "opacity-90" : "opacity-0"
             }`}
           />
         ))}
       </div>
 
       <div className="relative z-10 aspect-[4/5] overflow-hidden rounded-[2rem] bg-ink-100 shadow-lift">
-        {!current && <div className="skeleton absolute inset-0 rounded-none" />}
-        <AnimatePresence initial={false}>
-          {current && (
-            <motion.img
-              key={current.src}
-              src={current.src}
-              alt=""
-              fetchPriority={index === 0 ? "high" : "auto"}
-              decoding="async"
-              initial={{ opacity: 0, scale: 1.08 }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                transition: {
-                  opacity: { duration: 1.2, ease: "easeOut" },
-                  scale: { duration: INTERVAL_MS / 1000 + 1.5, ease: "linear" },
-                },
-              }}
-              exit={{ opacity: 0, transition: { duration: 1.2 } }}
-              className="absolute inset-0 h-full w-full select-none object-cover object-top"
-              draggable="false"
-            />
-          )}
-        </AnimatePresence>
+        {!currentReady && <div className="skeleton absolute inset-0 rounded-none" />}
+
+        {mounted.map((slide, i) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt=""
+            fetchPriority={i === 0 ? "high" : "low"}
+            decoding="async"
+            onLoad={() => markLoaded(slide.src)}
+            className={`absolute inset-0 h-full w-full select-none object-cover object-top transition-opacity duration-[1200ms] ease-out ${
+              isShown(slide, i) ? "opacity-100" : "opacity-0"
+            }`}
+            draggable="false"
+          />
+        ))}
 
         {/* Caption + story-style progress bars */}
-        {count > 0 && (
+        {currentReady && (
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-950/75 to-transparent px-5 pb-5 pt-20">
-            {current?.caption && (
+            {current.caption && (
               <AnimatePresence mode="wait">
                 <motion.p
                   key={current.caption + index}
