@@ -33,11 +33,53 @@ export const CONTENT = {
     dances: [
       {
         label: "Латиноамерикански танци",
-        list: ["Самба", "Ча-ча-ча", "Румба", "Пасо добле", "Джайв"],
+        list: [
+          {
+            name: "Самба",
+            desc: "Самбата е един от най-популярните латиноамерикански танци, произхождащ от Бразилия, където се е развил под влиянието на африканските ритми и местната култура. Тя се отличава с жизнен, енергичен и празничен характер, изпълнен с динамични движения, пружинираща стъпка и силно изразена ритмичност. Самбата носи усещане за свобода, радост и жизненост, като съчетава игриво настроение, флирт и темперамент с елегантност и музикалност. В състезателните спортни танци тя е известна със своя бърз ритъм, характерното движение на тялото и способността да предава духа и емоцията на бразилския карнавал.",
+          },
+          {
+            name: "Ча-ча-ча",
+            desc: "Ча-ча-ча е темпераментен и игрив латиноамерикански танц, възникнал в Куба през 50-те години на XX век. Характеризира се с бързи, ритмични стъпки и характерния ритъм „ча-ча-ча“, от който произлиза и името му. Танцът излъчва настроение, закачливост и увереност, като позволява на танцьорите да покажат своята артистичност, прецизност и емоционално взаимодействие с партньора. Ча-ча-ча съчетава енергия, лекота и елегантност, което го прави един от най-обичаните танци в спортните танци.",
+          },
+          {
+            name: "Румба",
+            desc: "Румбата е известна като танца на любовта и романтиката, произхождащ от Куба и развил се под влиянието на африканската и испанската култура. Тя се изпълнява в по-бавно темпо и се отличава с плавни движения, изразителна работа на тялото и силна емоционалност. Основен акцент в румбата е историята, която партньорите разказват чрез музиката и движението, изпълнена с чувства, привличане и нежност. Танцът развива грация, контрол и умение за предаване на емоции.",
+          },
+          {
+            name: "Пасо добле",
+            desc: "Пасо добле е драматичен и силно въздействащ танц с испански произход, вдъхновен от атмосферата на коридата. В него партньорът символизира тореадора, а партньорката може да въплъти плаща, бика или друг елемент от спектакъла. Танцът се отличава с горда стойка, категорични движения и силно сценично присъствие. Пасо добле излъчва сила, смелост и решителност, като позволява на танцьорите да покажат характер, драматизъм и артистичност.",
+          },
+          {
+            name: "Джайв",
+            desc: "Джайвът е най-бързият и енергичен от латиноамериканските танци, произлизащ от суинг и рокендрол културата на Съединените щати. Той се отличава с жив ритъм, бързи стъпки, подскоци и изпълнени с динамика движения. Джайвът носи усещане за радост, свобода и безгрижие, като насърчава танцьорите да изразят своята енергия, координация и чувство за хумор. Това е танц, който винаги създава настроение и впечатлява с атрактивност и жизненост.",
+          },
+        ],
       },
       {
         label: "Стандартни танци",
-        list: ["Английски валс", "Танго", "Виенски валс", "Фокстрот", "Куикстеп"],
+        list: [
+          {
+            name: "Английски валс",
+            desc: "Английският валс е елегантен и романтичен стандартен танц, възникнал в Англия в началото на XX век. Изпълнява се в плавно и умерено темпо, като се отличава с непрекъснато движение по дансинга, меки възходи и снижения и изящни завъртания. Танцът създава усещане за лекота и полет, а неговият нежен и лиричен характер позволява на танцьорите да изразят красота, хармония и емоционална свързаност с музиката и партньора.",
+          },
+          {
+            name: "Танго",
+            desc: "Тангото е страстен и драматичен танц с корени в Аржентина, който се отличава със своята силна емоционалност и характерно настроение. За разлика от останалите стандартни танци, то няма възходи и снижения, а движенията са категорични, резки и наситени с напрежение. Танцът изразява решителност, увереност и характер, като съчетава прецизна техника, силно присъствие и впечатляваща артистичност.",
+          },
+          {
+            name: "Виенски валс",
+            desc: "Виенският валс е един от най-старите и емблематични бални танци, зародил се в Австрия през XVIII век. Характеризира се с бързо темпо и непрекъснати въртеливи движения, които създават усещане за лекота и изящество. Неговият романтичен и тържествен характер го прави символ на елегантността и класическата бална традиция. Виенският валс развива координация, баланс и умение за плавно движение в двойка.",
+          },
+          {
+            name: "Фокстрот",
+            desc: "Фокстротът е стилен и изключително плавен стандартен танц, възникнал в Съединените щати в началото на XX век. Той се отличава с дълги, свободни и естествени движения, които създават впечатление за леко и безпроблемно плъзгане по дансинга. Танцът съчетава елегантност, музикалност и техническа прецизност, като позволява на танцьорите да демонстрират контрол, баланс и изтънчен стил.",
+          },
+          {
+            name: "Куикстеп",
+            desc: "Куикстепът е най-жизнерадостният и динамичен от стандартните танци, произлизащ от фокстрота и джаза. Той се изпълнява в бързо темпо и включва леки подскоци, бързи стъпки и плавно придвижване по дансинга. Куикстепът излъчва енергия, оптимизъм и лекота, като съчетава атрактивност и висока техническа сложност. Неговият весел и безгрижен характер го превръща в истински празник на движението и музиката.",
+          },
+        ],
       },
     ],
     gallery: {
@@ -88,7 +130,7 @@ export const CONTENT = {
       imageSub: "Записването е отворено",
       titleStart: "Открийте магията на",
       titleHighlight: "спортните танци!",
-      desc: "Запишете детето си в Клуб по спортни танци „Импулс – София“ и му подарете възможност да развие талант, увереност и любов към танца в приятелска и вдъхновяваща среда.",
+      desc: "Запишете се в Клуб по спортни танци „Импулс – София“ и открийте удоволствието от танца, новите приятелства и възможността да развиете своя талант във вдъхновяваща среда.",
       stats: [
         { value: "150+", label: "Активни ученици" },
         { value: "30+", label: "Години опит" },
@@ -233,8 +275,7 @@ export const CONTENT = {
     },
     newsPage: {
       title: "Новини",
-      subtitle:
-        "Бъдете в крак с последните събития и участия от нашия клуб.",
+      subtitle: "Следете последните събития и участия на нашия клуб.",
       loading: "Зареждане на новини...",
       empty: "Все още няма публикувани новини.",
       readMore: "Прочети статията",
@@ -314,11 +355,53 @@ export const CONTENT = {
     dances: [
       {
         label: "Latin American",
-        list: ["Samba", "Cha-cha-cha", "Rumba", "Paso Doble", "Jive"],
+        list: [
+          {
+            name: "Samba",
+            desc: "Samba is one of the most popular Latin American dances. It comes from Brazil, where it developed under the influence of African rhythms and local culture. It has a lively, energetic and festive character, full of dynamic movement, a bouncing step and strong rhythm. Samba carries a feeling of freedom, joy and vitality, combining a playful, flirtatious and fiery mood with elegance and musicality. In competitive dancesport it is known for its fast rhythm, its characteristic body action and its ability to capture the spirit and emotion of the Brazilian carnival.",
+          },
+          {
+            name: "Cha-cha-cha",
+            desc: "Cha-cha-cha is a spirited, playful Latin American dance that originated in Cuba in the 1950s. It is defined by quick, rhythmic steps and the distinctive “cha-cha-cha” rhythm that gives it its name. The dance radiates fun, cheekiness and confidence, letting dancers show their artistry, precision and connection with their partner. Cha-cha-cha combines energy, lightness and elegance, which makes it one of the best-loved dances in dancesport.",
+          },
+          {
+            name: "Rumba",
+            desc: "Rumba is known as the dance of love and romance. It comes from Cuba and developed under African and Spanish influences. It is danced at a slower tempo and stands out for its smooth movement, expressive body action and strong emotion. At the heart of rumba is the story the partners tell through music and movement, full of feeling, attraction and tenderness. The dance develops grace, control and the ability to convey emotion.",
+          },
+          {
+            name: "Paso Doble",
+            desc: "Paso Doble is a dramatic, powerful dance of Spanish origin, inspired by the atmosphere of the bullfight. The man represents the matador, while the lady can portray the cape, the bull or another part of the spectacle. The dance is marked by a proud posture, decisive movements and a strong stage presence. Paso Doble radiates strength, courage and determination, letting dancers show character, drama and artistry.",
+          },
+          {
+            name: "Jive",
+            desc: "Jive is the fastest and most energetic of the Latin American dances, born from the swing and rock 'n' roll culture of the United States. It features a lively rhythm, quick steps, kicks and movement full of drive. Jive brings a feeling of joy, freedom and carefree fun, encouraging dancers to express their energy, coordination and sense of humour. It is a dance that always lifts the mood and impresses with its flair and vitality.",
+          },
+        ],
       },
       {
         label: "Standard",
-        list: ["Waltz", "Tango", "Viennese Waltz", "Foxtrot", "Quickstep"],
+        list: [
+          {
+            name: "Waltz",
+            desc: "The (English) Waltz is an elegant, romantic Standard dance that originated in England in the early 20th century. It is danced at a smooth, moderate tempo, with continuous travel around the floor, soft rise and fall and graceful turns. The dance creates a feeling of lightness and flight, and its gentle, lyrical character lets dancers express beauty, harmony and an emotional bond with the music and their partner.",
+          },
+          {
+            name: "Tango",
+            desc: "Tango is a passionate, dramatic dance with roots in Argentina, known for its intense emotion and distinctive mood. Unlike the other Standard dances it has no rise and fall; its movements are decisive, sharp and full of tension. The dance expresses determination, confidence and character, combining precise technique, a strong presence and striking artistry.",
+          },
+          {
+            name: "Viennese Waltz",
+            desc: "The Viennese Waltz is one of the oldest and most iconic ballroom dances, born in Austria in the 18th century. It is characterised by a fast tempo and continuous rotating movement that creates a feeling of lightness and grace. Its romantic, festive character has made it a symbol of elegance and classic ballroom tradition. The Viennese Waltz develops coordination, balance and smooth movement as a couple.",
+          },
+          {
+            name: "Foxtrot",
+            desc: "Foxtrot is a stylish and exceptionally smooth Standard dance that originated in the United States in the early 20th century. It is defined by long, free and natural movements that give the impression of gliding effortlessly across the floor. The dance combines elegance, musicality and technical precision, letting dancers demonstrate control, balance and refined style.",
+          },
+          {
+            name: "Quickstep",
+            desc: "Quickstep is the most joyful and dynamic of the Standard dances, developed from the foxtrot and jazz. It is danced at a fast tempo and includes light hops, quick steps and smooth travel around the floor. Quickstep radiates energy, optimism and lightness, combining showmanship with high technical difficulty. Its cheerful, carefree character makes it a true celebration of movement and music.",
+          },
+        ],
       },
     ],
     gallery: {
@@ -404,7 +487,7 @@ export const CONTENT = {
       imageSub: "Enrollment Open Now",
       titleStart: "Discover the magic of",
       titleHighlight: "dancesport!",
-      desc: "Enrol your child at Dancesport Club “Impuls – Sofia” and give them the chance to develop talent, confidence and a love of dance in a friendly, inspiring environment.",
+      desc: "Join Dancesport Club “Impuls – Sofia” and discover the joy of dance, new friendships and the chance to develop your talent in an inspiring environment.",
       stats: [
         { value: "150+", label: "Active Students" },
         { value: "30+", label: "Years Experience" },
@@ -479,8 +562,7 @@ Behind the successes of all dance couples and solo ladies stand countless hours 
     },
     newsPage: {
       title: "News",
-      subtitle:
-        "Keep up with the latest events and performances from our club.",
+      subtitle: "Follow the latest events and competitions of our club.",
       loading: "Loading news...",
       empty: "No news published yet.",
       readMore: "Read article",

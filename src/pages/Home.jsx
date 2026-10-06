@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Container from "../components/Container.jsx";
 import { supabase } from "../lib/supabase";
 import HeroSlideshow from "../components/HeroSlideshow";
+import DanceList from "../components/DanceList";
 import { useLanguage } from "../context/LanguageContext";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -162,37 +163,7 @@ export default function Home() {
           aria-hidden="true"
         />
         <Container className="relative">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
-            {t.dances.map((group, g) => (
-              <div key={group.label}>
-                <h2 className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-mint">
-                  <span className="font-display text-2xl font-medium normal-case italic tracking-normal">
-                    0{g + 1}
-                  </span>
-                  {group.label}
-                </h2>
-                <ul>
-                  {group.list.map((dance, i) => (
-                    <motion.li
-                      key={dance}
-                      initial={{ x: -16, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.07, duration: 0.45 }}
-                      className="group flex items-baseline justify-between gap-4 border-t border-white/10 py-2.5 last:border-b md:py-3"
-                    >
-                      <span className="font-display text-2xl font-medium text-white/90 transition-all duration-300 group-hover:translate-x-2 group-hover:italic group-hover:text-mint sm:text-3xl md:text-4xl">
-                        {dance}
-                      </span>
-                      <span className="text-xs font-bold tabular-nums text-white/30 transition-colors group-hover:text-mint">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <DanceList groups={t.dances} />
         </Container>
       </section>
 
