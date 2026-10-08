@@ -166,29 +166,43 @@ export const CONTENT = {
         terms: "Условия за ползване",
       },
       col3: "Посетете ни",
-      address: 'ж.к. Младост 2, ул. "Св. Киприян" 236, 1799, София',
       rights: "Всички права запазени.",
       madeWith: "Направено с ❤️ за танцьори.",
     },
+    // First entry is the main studio (also shown in the footer)
+    locations: [
+      {
+        name: 'Основна зала - Народно читалище "Джон Атанасов"',
+        address: 'ж.к. Младост 2, ул. "Св. Киприян" 236, 1799, София',
+        mapQuery: "Ул. Свети Киприян 236 1799 Sofia, Bulgaria",
+      },
+      {
+        name: '125 СУ "Боян Пенев"',
+        address: 'ж.к. Младост 1, ул. "Никола Генадиев" 1, 1784, София',
+        mapQuery:
+          "125 СУ Боян Пенев, ул. Никола Генадиев 1, 1784 Sofia, Bulgaria",
+        note: "Заниманията тук са само за деца, които учат в училището.",
+      },
+    ],
     testimonials: {
       title: "Отзиви от залата",
-      subtitle: "Истински истории от нашите ученици и родители.",
+      subtitle: "Истински истории от родителите на нашите танцьори.",
       list: [
         {
-          name: "Сара Дженкинс",
+          name: "Гергана",
           role: "Родител",
           quote:
             "Увереността, която дъщеря ми придоби тук, е безценна. Учителите са грижовни, но изключителни професионалисти.",
         },
         {
-          name: "Майк Чен",
-          role: "Хип-хоп за възрастни",
+          name: "Тим",
+          role: "Родител",
           quote:
-            "Притеснявах се да започна да танцувам на 28, но атмосферата тук е толкова приветлива. Това е най-хубавата част от седмицата ми.",
+            "Синът ми се притесняваше в началото, но атмосферата тук е толкова приветлива. Тренировките са най-хубавата част от седмицата му.",
         },
         {
-          name: "Елена Родригес",
-          role: "Балет",
+          name: "Елена",
+          role: "Родител",
           quote:
             "Професионално обучение в семейна среда. Годишният спектакъл беше абсолютно вълшебен.",
         },
@@ -266,8 +280,6 @@ export const CONTENT = {
         },
       },
       info: {
-        addressLabel: "Адрес:",
-        addressVal: 'ж.к. Младост 2, ул. "Св. Киприян" 236, 1799, София',
         phoneLabel: "Телефон:",
         emailLabel: "Имейл:",
         mapTitle: "Карта с местоположението на Импулс София",
@@ -325,8 +337,6 @@ export const CONTENT = {
         },
       },
       info: {
-        addressLabel: "Address:",
-        addressVal: 'g.k. Mladost 2, ul. "Sv. Kipriyan" 236, 1799, Sofia',
         phoneLabel: "Phone:",
         emailLabel: "Email:",
         mapTitle: "Map showing the location of Impuls Sofia",
@@ -478,10 +488,24 @@ export const CONTENT = {
         terms: "Terms of Service",
       },
       col3: "Visit Us",
-      address: 'g.k. Mladost 2, ul. "Sv. Kipriyan" 236, 1799, Sofia',
       rights: "All rights reserved.",
       madeWith: "Made with ❤️ for dancers.",
     },
+    // First entry is the main studio (also shown in the footer)
+    locations: [
+      {
+        name: "Main studio",
+        address: 'g.k. Mladost 2, ul. "Sv. Kipriyan" 236, 1799, Sofia',
+        mapQuery: "Ул. Свети Киприян 236 1799 Sofia, Bulgaria",
+      },
+      {
+        name: '125th Secondary School "Boyan Penev"',
+        address: 'g.k. Mladost 1, ul. "Nikola Genadiev" 1, 1784, Sofia',
+        mapQuery:
+          "125 СУ Боян Пенев, ул. Никола Генадиев 1, 1784 Sofia, Bulgaria",
+        note: "Classes here are only for children who attend the school.",
+      },
+    ],
     splitSection: {
       imageTag: "New groups from 5 October",
       imageSub: "Enrollment Open Now",
@@ -497,23 +521,23 @@ export const CONTENT = {
     },
     testimonials: {
       title: "Heard on the dance floor",
-      subtitle: "Real stories from our students and parents.",
+      subtitle: "Real stories from the parents of our dancers.",
       list: [
         {
-          name: "Sarah Jenkins",
+          name: "Gergana",
           role: "Parent",
           quote:
             "The confidence my daughter has gained here is priceless. The teachers are nurturing but professional.",
         },
         {
-          name: "Mike Chen",
-          role: "Adult Hip-Hop",
+          name: "Tim",
+          role: "Parent",
           quote:
-            "I was nervous to start dancing at 28, but the vibe here is so welcoming. It’s the highlight of my week.",
+            "My son was nervous at first, but the vibe here is so welcoming. Training is the highlight of his week.",
         },
         {
-          name: "Elena Rodriguez",
-          role: "Ballet Student",
+          name: "Elena",
+          role: "Parent",
           quote:
             "Professional training in a family environment. The end-of-year showcase was absolutely magical.",
         },

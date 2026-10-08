@@ -7,8 +7,8 @@ import usePageTitle from "../hooks/usePageTitle";
 import { SITE, telHref } from "../lib/site";
 import { motion } from "framer-motion";
 
-const MAP_SRC =
-  "https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=%D0%A3%D0%BB.%20%D0%A1%D0%B2%D0%B5%D1%82%D0%B8%20%D0%9A%D0%B8%D0%BF%D1%80%D0%B8%D1%8F%D0%BD%20236%201799%20Sofia%2C%20Bulgaria&maptype=roadmap";
+const mapSrc = (query) =>
+  `https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=${encodeURIComponent(query)}&maptype=roadmap`;
 
 function Field({ id, label, error, children }) {
   return (
@@ -101,7 +101,7 @@ export default function Contact() {
           subtitle={content.desc}
         />
 
-        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-12">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2 lg:gap-12">
           {/* LEFT COLUMN: Form */}
           <motion.div
             initial={{ y: 24, opacity: 0 }}
@@ -196,17 +196,9 @@ export default function Contact() {
             initial={{ y: 24, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.55, delay: 0.2 }}
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-8"
           >
             <dl className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <dt className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
-                  {content.info.addressLabel}
-                </dt>
-                <dd className="mt-1 font-display text-2xl font-semibold leading-snug text-ink">
-                  {content.info.addressVal}
-                </dd>
-              </div>
               <div>
                 <dt className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
                   {content.info.phoneLabel}
@@ -229,16 +221,34 @@ export default function Contact() {
               </div>
             </dl>
 
-            <div className="relative min-h-[340px] flex-1 overflow-hidden rounded-[2rem] border border-ink/10 bg-ink-100 shadow-soft">
-              <iframe
-                title={content.info.mapTitle}
-                src={MAP_SRC}
-                className="absolute inset-0 h-full w-full border-0"
-                loading="lazy"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
+            {/* Every location gets the same block: name, address, map */}
+            {t.locations.map((loc) => (
+              <div key={loc.name}>
+                <h2 className="text-xs font-bold uppercase tracking-[0.18em] text-mint-600">
+                  {loc.name}
+                </h2>
+                <p className="mt-1 font-display text-2xl font-semibold leading-snug text-ink">
+                  {loc.address}
+                </p>
+                {loc.note && (
+                  <p className="mt-1 text-sm font-medium text-ink-500">
+                    {loc.note}
+                  </p>
+                )}
+                <div className="relative mt-4 h-60 overflow-hidden rounded-[2rem] border border-ink/10 bg-ink-100 shadow-soft">
+                  {loc.mapQuery && (
+                    <iframe
+                      title={`${content.info.mapTitle} – ${loc.name}`}
+                      src={mapSrc(loc.mapQuery)}
+                      className="absolute inset-0 h-full w-full border-0"
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  )}
+                </div>
+              </div>
+            ))}
           </motion.div>
         </div>
       </Container>

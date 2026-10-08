@@ -91,7 +91,7 @@ export default function Footer() {
               {footer.col3}
             </h3>
             <address className="space-y-2.5 not-italic text-ink-100/80">
-              <p>{footer.address}</p>
+              <p>{t.locations[0].address}</p>
               <p>
                 <a href={`mailto:${SITE.email}`} className="transition-colors hover:text-mint">
                   {SITE.email}
