@@ -31,12 +31,9 @@ export default function Article() {
     async function fetchArticle() {
       const { data, error } = await supabase
         .from("articles")
+        // "*" so the optional facebook_url column is picked up when it exists
         .select(`
-          title, 
-          content, 
-          cover_image, 
-          published_at,
-          album_id,
+          *,
           albums (
             id,
             gallery_images (
@@ -145,6 +142,17 @@ export default function Article() {
             <div className="whitespace-pre-wrap text-lg leading-relaxed text-ink-900/80">
               {article.content}
             </div>
+            {article.facebook_url && (
+              <a
+                href={article.facebook_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-arrow mt-10"
+              >
+                {content.facebookLink}
+                <span aria-hidden="true">↗</span>
+              </a>
+            )}
           </motion.div>
         </div>
       </Container>

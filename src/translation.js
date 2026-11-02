@@ -293,6 +293,7 @@ export const CONTENT = {
       readMore: "Прочети статията",
       back: "Назад към новини",
       notFound: "Статията не е намерена.",
+      facebookLink: "Виж публикацията във Facebook",
     },
     notFoundPage: {
       title: "Страницата не е намерена",
@@ -592,6 +593,7 @@ Behind the successes of all dance couples and solo ladies stand countless hours 
       readMore: "Read article",
       back: "Back to news",
       notFound: "Article not found.",
+      facebookLink: "View the post on Facebook",
     },
     notFoundPage: {
       title: "Page not found",

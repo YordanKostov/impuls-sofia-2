@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import Container from "../components/Container";
 import { useLanguage } from "../context/LanguageContext";
 import { motion } from "framer-motion";
 import ImageCarousel from "../components/ImageCarousel";
 import usePageTitle from "../hooks/usePageTitle";
+import { supabase } from "../lib/supabase";
+import { CAMPS_ALBUM_ID } from "../lib/site";
 
 const studioPhotos = ["/studio/studio.webp", "/studio/studio1.webp"];
 
@@ -10,6 +13,28 @@ export default function About() {
   const { t } = useLanguage();
   const content = t.about;
   usePageTitle(content.title);
+
+  // Photos of the camps album, last photo first; studio photos as a fallback
+  const [photos, setPhotos] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    supabase
+      .from("gallery_images")
+      .select("image_url")
+      .eq("album_id", CAMPS_ALBUM_ID)
+      .order("order_index", { ascending: false })
+      .then(({ data, error }) => {
+        if (ignore) return;
+        if (error) console.error("Error loading camps photos:", error);
+        setPhotos(data?.length ? data.map((img) => img.image_url) : studioPhotos);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const [lead, ...paragraphs] = content.desc
     .split(/\n\s*\n/)
@@ -52,7 +77,7 @@ export default function About() {
               aria-hidden="true"
             />
             <ImageCarousel
-              images={studioPhotos}
+              images={photos}
               priority
               className="relative aspect-[4/5] rounded-[2rem] shadow-lift"
             />

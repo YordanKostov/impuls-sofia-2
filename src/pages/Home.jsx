@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Container from "../components/Container.jsx";
 import { supabase } from "../lib/supabase";
+import { CAMPS_ALBUM_ID } from "../lib/site";
 import HeroSlideshow from "../components/HeroSlideshow";
 import DanceList from "../components/DanceList";
 import { useLanguage } from "../context/LanguageContext";
@@ -23,9 +24,12 @@ function SectionHeading({ children, className = "" }) {
 }
 
 export default function Home() {
-  // Newest albums: covers feed the hero carousel, the first four the preview grid
+  // The six newest albums, shown oldest to newest: covers feed the hero
+  // carousel, the last four the preview grid
   const [albums, setAlbums] = useState([]);
   const [albumsLoaded, setAlbumsLoaded] = useState(false);
+  // undefined while loading, then the camps album cover (or the studio photo)
+  const [splitImage, setSplitImage] = useState();
 
   const { t } = useLanguage();
   usePageTitle(t.hero.eyebrow);
@@ -34,16 +38,25 @@ export default function Home() {
     let ignore = false;
 
     async function fetchHomeImages() {
-      const { data, error } = await supabase
-        .from("albums")
-        .select("id, cover_url, title")
-        .order("created_at", { ascending: false })
-        .limit(6);
+      const [{ data, error }, camps] = await Promise.all([
+        supabase
+          .from("albums")
+          .select("id, cover_url, title")
+          .order("created_at", { ascending: false })
+          .limit(6),
+        supabase
+          .from("albums")
+          .select("cover_url")
+          .eq("id", CAMPS_ALBUM_ID)
+          .maybeSingle(),
+      ]);
 
       if (ignore) return;
       if (error) console.error("Error loading home albums:", error);
-      setAlbums((data || []).filter((album) => album.cover_url));
+      if (camps.error) console.error("Error loading camps album:", camps.error);
+      setAlbums((data || []).filter((album) => album.cover_url).reverse());
       setAlbumsLoaded(true);
+      setSplitImage(camps.data?.cover_url || STUDIO_PHOTOS[0]);
     }
 
     fetchHomeImages();
@@ -58,7 +71,7 @@ export default function Home() {
     : albumsLoaded
       ? STUDIO_PHOTOS.map((src) => ({ src }))
       : [];
-  const previewAlbums = albums.slice(0, 4);
+  const previewAlbums = albums.slice(-4);
 
   // "IMPULS – SOFIA" -> "IMPULS" / "– SOFIA" on two lines
   const [brandFirst, brandRest] = t.hero.brand.split(/\s(?=[–-])/);
@@ -224,13 +237,17 @@ export default function Home() {
               transition={{ duration: 0.7 }}
               className="group relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-lift sm:aspect-[4/3] lg:aspect-[4/5]"
             >
-              <img
-                src="/studio/studio.webp"
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
+              {splitImage ? (
+                <img
+                  src={splitImage}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              ) : (
+                <div className="skeleton h-full w-full rounded-none" />
+              )}
               {/* New-groups announcement */}
               <div className="absolute inset-x-4 bottom-4 flex flex-col gap-4 rounded-3xl bg-ink-950/90 p-5 text-white shadow-lift ring-1 ring-mint/30 backdrop-blur-md sm:inset-x-5 sm:bottom-5 sm:flex-row sm:items-end sm:justify-between sm:p-6">
                 <div>
