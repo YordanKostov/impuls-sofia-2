@@ -51,6 +51,10 @@ function suggestFromText(text) {
   return { title, excerpt };
 }
 
+// Some pastes from Facebook lose the line breaks before "•" bullets and
+// leave a replacement character (U+FFFD) in their place; put the breaks back
+const fixPaste = (text) => text.replace(/\uFFFD/g, "\n");
+
 // The title is shown above the text, so don't repeat it as the first line
 function bodyWithoutTitle(text, title) {
   const [first, ...rest] = text.trim().split("\n");
@@ -98,6 +102,9 @@ function explainError(error) {
   }
   if (/facebook_url/i.test(msg)) {
     return "Липсва колоната facebook_url. Пуснете supabase/admin-setup.sql в Supabase.";
+  }
+  if (/(title|excerpt|content)_en/i.test(msg)) {
+    return "Липсват колоните за английския текст. Пуснете supabase/articles-english.sql в Supabase.";
   }
   return msg;
 }
@@ -182,6 +189,9 @@ function ImportForm() {
   const [text, setText] = useState("");
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
+  const [textEn, setTextEn] = useState("");
+  const [titleEn, setTitleEn] = useState("");
+  const [excerptEn, setExcerptEn] = useState("");
   const [date, setDate] = useState(today);
   const [photos, setPhotos] = useState([]); // [{ file, preview }]
   const [saving, setSaving] = useState(false);
@@ -264,6 +274,9 @@ function ImportForm() {
     setText("");
     setTitle("");
     setExcerpt("");
+    setTextEn("");
+    setTitleEn("");
+    setExcerptEn("");
     setDate(today());
     setPhotos([]);
     setPhotoError(null);
@@ -323,6 +336,9 @@ function ImportForm() {
         album_id: albumId,
       };
       if (fbUrl.trim()) article.facebook_url = fbUrl.trim();
+      if (titleEn.trim()) article.title_en = titleEn.trim();
+      if (excerptEn.trim()) article.excerpt_en = excerptEn.trim();
+      if (textEn.trim()) article.content_en = bodyWithoutTitle(textEn, titleEn);
 
       const { error } = await supabase.from("articles").insert(article);
       if (error) throw error;
@@ -381,7 +397,7 @@ function ImportForm() {
           rows={10}
           className="field"
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setText(fixPaste(e.target.value))}
           onBlur={() => fillFromText(false)}
         />
       </Field>
@@ -426,6 +442,48 @@ function ImportForm() {
       >
         Попълни отново заглавие и резюме от текста
       </button>
+
+      <details className="rounded-2xl border border-ink/10 bg-white/50 p-5 [&[open]>summary]:mb-5">
+        <summary className="cursor-pointer text-sm font-bold uppercase tracking-[0.14em] text-ink-700">
+          Английска версия (по желание)
+        </summary>
+        <div className="space-y-5">
+          <p className="text-sm text-ink-500">
+            Показва се, когато сайтът е на английски. Без нея се показва българският текст.
+          </p>
+          <Field id="textEn" label="Text (English)">
+            <textarea
+              id="textEn"
+              rows={8}
+              className="field"
+              value={textEn}
+              onChange={(e) => setTextEn(fixPaste(e.target.value))}
+              onBlur={() => {
+                const suggestion = suggestFromText(textEn);
+                if (!titleEn) setTitleEn(suggestion.title);
+                if (!excerptEn) setExcerptEn(suggestion.excerpt);
+              }}
+            />
+          </Field>
+          <Field id="titleEn" label="Title (English)">
+            <input
+              id="titleEn"
+              className="field"
+              value={titleEn}
+              onChange={(e) => setTitleEn(e.target.value)}
+            />
+          </Field>
+          <Field id="excerptEn" label="Excerpt (English)">
+            <textarea
+              id="excerptEn"
+              rows={3}
+              className="field"
+              value={excerptEn}
+              onChange={(e) => setExcerptEn(e.target.value)}
+            />
+          </Field>
+        </div>
+      </details>
 
       <Field
         id="photos"

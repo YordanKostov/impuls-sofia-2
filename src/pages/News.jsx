@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { localized } from "../lib/localize";
 import { Link } from "react-router-dom";
 import Container from "../components/Container";
 import PageHeader from "../components/PageHeader";
@@ -21,7 +22,8 @@ export default function News() {
     async function fetchArticles() {
       const { data, error } = await supabase
         .from("articles")
-        .select("title, excerpt, slug, cover_image, published_at")
+        // "*" so the optional English columns are picked up when they exist
+        .select("*")
         .order("published_at", { ascending: false });
 
       if (ignore) return;
@@ -103,10 +105,10 @@ export default function News() {
                     {formatDate(a.published_at)}
                   </time>
                   <h2 className="mt-2 line-clamp-2 font-display text-3xl font-semibold leading-tight text-ink transition-colors group-hover:text-ink-700">
-                    {a.title}
+                    {localized(a, "title", lang)}
                   </h2>
                   <p className="mt-2 line-clamp-3 leading-relaxed text-ink-500">
-                    {a.excerpt}
+                    {localized(a, "excerpt", lang)}
                   </p>
                   <span className="link-arrow mt-4">
                     {content.readMore}

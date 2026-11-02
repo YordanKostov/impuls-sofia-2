@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
+import { localized } from "../lib/localize";
 import Container from "../components/Container";
 import ImageCarousel from "../components/ImageCarousel";
 import { useLanguage } from "../context/LanguageContext";
@@ -22,7 +23,7 @@ export default function Article() {
   const { t, lang } = useLanguage();
   const content = t.newsPage;
 
-  usePageTitle(article?.title || content.title);
+  usePageTitle(localized(article, "title", lang) || content.title);
 
   useEffect(() => {
     let ignore = false;
@@ -137,10 +138,10 @@ export default function Article() {
               {dateStr}
             </time>
             <h1 className="display mb-8 text-4xl md:text-6xl">
-              {article.title}
+              {localized(article, "title", lang)}
             </h1>
             <div className="whitespace-pre-wrap text-lg leading-relaxed text-ink-900/80">
-              {article.content}
+              {localized(article, "content", lang)}
             </div>
             {article.facebook_url && (
               <a
