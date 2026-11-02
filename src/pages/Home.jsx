@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Container from "../components/Container.jsx";
 import { supabase } from "../lib/supabase";
+import { localized } from "../lib/localize";
 import { CAMPS_ALBUM_ID } from "../lib/site";
 import HeroSlideshow from "../components/HeroSlideshow";
 import DanceList from "../components/DanceList";
@@ -31,7 +32,7 @@ export default function Home() {
   // undefined while loading, then the camps album cover (or the studio photo)
   const [splitImage, setSplitImage] = useState();
 
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   usePageTitle(t.hero.eyebrow);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function Home() {
       const [{ data, error }, camps] = await Promise.all([
         supabase
           .from("albums")
-          .select("id, cover_url, title")
+          .select("*") // includes title_en once it exists
           .order("created_at", { ascending: false })
           .limit(6),
         supabase
@@ -67,7 +68,7 @@ export default function Home() {
 
   // Album covers (captioned with the album title); studio photos if there are none
   const heroSlides = albums.length
-    ? albums.map((album) => ({ src: album.cover_url, caption: album.title }))
+    ? albums.map((album) => ({ src: album.cover_url, caption: localized(album, "title", lang) }))
     : albumsLoaded
       ? STUDIO_PHOTOS.map((src) => ({ src }))
       : [];
@@ -210,14 +211,14 @@ export default function Home() {
                 >
                   <img
                     src={album.cover_url}
-                    alt={album.title}
+                    alt={localized(album, "title", lang)}
                     loading="lazy"
                     decoding="async"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 flex items-end bg-gradient-to-t from-ink-950/80 via-ink-950/10 to-transparent p-4">
                     <span className="font-display text-xl font-semibold leading-tight text-white">
-                      {album.title}
+                      {localized(album, "title", lang)}
                     </span>
                   </div>
                 </Link>

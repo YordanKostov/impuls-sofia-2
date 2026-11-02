@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabase";
+import { localized } from "../lib/localize";
 import Container from "../components/Container";
 import PageHeader from "../components/PageHeader";
 import { useLanguage } from "../context/LanguageContext";
@@ -35,7 +36,7 @@ export default function Gallery() {
   const closeBtnRef = useRef(null);
   const thumbsRef = useRef(null);
 
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const content = t.galleryPage;
   usePageTitle(content.title);
 
@@ -178,7 +179,7 @@ export default function Gallery() {
                 />
                 <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink-950/85 via-ink-950/15 to-transparent p-6">
                   <h2 className="font-display text-3xl font-semibold leading-tight text-white">
-                    {album.title}
+                    {localized(album, "title", lang)}
                   </h2>
                   {album.description && (
                     <p className="mt-1 line-clamp-2 text-sm text-white/75">
@@ -210,7 +211,7 @@ export default function Gallery() {
             exit={{ opacity: 0 }}
             role="dialog"
             aria-modal="true"
-            aria-label={selectedAlbum.title}
+            aria-label={localized(selectedAlbum, "title", lang)}
             className="fixed inset-0 z-[60] flex items-center justify-center bg-ink-950/95 backdrop-blur-sm"
             onClick={closeLightbox}
           >
@@ -268,7 +269,7 @@ export default function Gallery() {
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 bg-gradient-to-t from-ink-950 to-transparent px-4 pb-5 pt-16">
                   <div className="text-center">
                     <h3 className="font-display text-2xl font-semibold text-white">
-                      {selectedAlbum.title}
+                      {localized(selectedAlbum, "title", lang)}
                     </h3>
                     {total > 0 && (
                       <p className="mt-0.5 text-sm tabular-nums text-white/60">

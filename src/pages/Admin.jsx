@@ -104,7 +104,7 @@ function explainError(error) {
     return "Липсва колоната facebook_url. Пуснете supabase/admin-setup.sql в Supabase.";
   }
   if (/(title|excerpt|content)_en/i.test(msg)) {
-    return "Липсват колоните за английския текст. Пуснете supabase/articles-english.sql в Supabase.";
+    return "Липсват колоните за английския текст. Пуснете supabase/articles-english.sql и supabase/albums-english.sql в Supabase.";
   }
   return msg;
 }
@@ -312,7 +312,11 @@ function ImportForm() {
       if (urls.length > 1) {
         const { data: album, error } = await supabase
           .from("albums")
-          .insert({ title: cleanTitle, cover_url: urls[0] })
+          .insert({
+            title: cleanTitle,
+            cover_url: urls[0],
+            ...(titleEn.trim() && { title_en: titleEn.trim() }),
+          })
           .select("id")
           .single();
         if (error) throw error;
